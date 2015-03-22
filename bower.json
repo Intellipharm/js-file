@@ -1,0 +1,45 @@
+{
+    "name": "js-file-uploader-and-downloader",
+    "version": "0.0.1",
+    "homepage": "https://github.com/Intellipharm/js-file-uploader-and-downloader",
+    "authors": [
+        "Intellipharm <damian@intellipharm.com.au>",
+        "Neil Russell <neilrusell6@gmail.com.au>",
+        "Timothy Ruhle <timothy.ruhle@intellipharm.com.au>"
+    ],
+    "description": "A JavaScript File Uploader & Downloader.",
+    "main": [
+        "dist/js-file-uploader-and-downloader.js",
+        "dist/js-file-uploader-and-downloader.min.js"
+    ],
+    "moduleType": [
+        "globals"
+    ],
+    "keywords": [
+        "javascript",
+        "javascript file uploader",
+        "javascript file downloader"
+    ],
+    "license": "MIT",
+    "ignore": [
+        "bower_components",
+        "grunt",
+        "lib",
+        "node_modules",
+        "tests",
+        ".gitignore",
+        "Gruntfile.js",
+        "LICENSE",
+        "bower.json",
+        "package.json"
+    ],
+    "dependencies": {
+        "lodash": "~3.5.0",
+        "js-xls": "~0.7.5",
+        "js-xlsx": "~0.7.11",
+        "modernizr": "~2.8.3"
+    },
+    "devDependencies": {
+        "angular-mocks": "~1.3.14"
+    }
+}
