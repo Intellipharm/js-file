@@ -1,7 +1,23 @@
 # js-file
 
+JSFile handles file creation, downloading and reading in the browser using the SheetJS/JS-XLXS & SheetJS/JS-XLX libraries.
+
+JSFile has three services:
+
+###### FileCreator
+
+creates a file using json data. Currently only supports xlxs.
+
+###### FileDownloader
+
+initiates a download when passed a file created using FileCreator.
+
+###### FileReader
+
+converts a file into json. Curently only supports xlxs, xlx, csv, ods.
+
 ## Dependencies
-js-file-uploader-and-downloader depends on [Lodash](https://github.com/lodash/lodash), [js-xlsx](https://github.com/SheetJS/js-xlsx), [js-xls](https://github.com/SheetJS/js-xls) 
+js-file depends on [Lodash](https://github.com/lodash/lodash), [js-xlsx](https://github.com/SheetJS/js-xlsx), [js-xls](https://github.com/SheetJS/js-xls) 
 
 ## Installation
 
