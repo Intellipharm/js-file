@@ -2,20 +2,6 @@
 
 JSFile handles file creation, downloading and reading in the browser using the SheetJS/JS-XLXS & SheetJS/JS-XLX libraries.
 
-JSFile has three services:
-
-###### FileCreator
-
-creates a file using json data. Currently only supports xlxs.
-
-###### FileDownloader
-
-initiates a download when passed a file created using FileCreator.
-
-###### FileReader
-
-converts a file into json. Curently only supports xlxs, xlx, csv, ods.
-
 ## Dependencies
 js-file depends on [Lodash](https://github.com/lodash/lodash), [js-xlsx](https://github.com/SheetJS/js-xlsx), [js-xls](https://github.com/SheetJS/js-xls) 
 
@@ -76,6 +62,11 @@ Call window.JSFile.FileDownloader.downloadWorkbook with the result of the above 
 
 ## API
 
+#### JSFile.Workbook(data)
+
+Model used to create workbook.
+
+
 #### JSFile.FileCreator
 
 ###### createWorkbook(data)
@@ -84,11 +75,19 @@ Call window.JSFile.FileDownloader.downloadWorkbook with the result of the above 
 | ------ | ------ | -------------------------------------------- |
 | data   | array  | Data to use when creating the workbook       |
 
+
 #### JSFile.FileDownloader
 
 ###### downloadWorkbook(workbook, filename)
+
+Initiates a download when passed an instance of the JSFile.Workbook model.
 
 | param      | type             | description                                                    |
 | ---------- | ---------------- | -------------------------------------------------------------- |
 | workbook   | JSFile.Workbook  | Workbook created using JSFile.FileCreator.createWorkbook       |
 | filename   | string           | Name of the file                                               |
+
+
+#### JSFile.FileReader
+
+Converts a file into json. Curently only supports xlxs, xlx, csv, ods.

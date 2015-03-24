@@ -27,9 +27,12 @@
 
             var data = types[type]();
 
-            var FileCreator     = window.JSFile.FileCreator;
+            //var FileCreator     = window.JSFile.FileCreator;
             var FileDownloader  = window.JSFile.FileDownloader;
-            var workbook        = FileCreator.createWorkbook(data);
+            //var workbook        = FileCreator.createWorkbook(data);
+
+            var workbook = new window.JSFile.Workbook(data);
+
 
             FileDownloader.downloadWorkbook(workbook, filename);
         };

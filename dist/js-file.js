@@ -357,3 +357,237 @@ window.JSFile = window.JSFile || {};
     module.FileUtil = new FileUtil();
 
 })(window.JSFile);
+"use strict";
+
+window.JSFile = window.JSFile || {};
+
+(function(module) {
+
+    /**
+     * Workbook Model
+     *
+     * @param data
+     * @constructor
+     */
+    module.Workbook = function(data) {
+
+        if (_.isUndefined(data) || _.isNull(data)) {
+            throw new Error()
+        }
+
+        var self = this;
+
+        this.SheetNames = [];
+        this.Sheets = {};
+
+        // transform data
+        data = module.FileUtil.transformData(data);
+
+        // sheets
+        _.forEach(data, function(sheet) {
+
+            self.SheetNames.push(sheet.name);
+            self.Sheets[sheet.name] = new module.Worksheet(sheet);
+        });
+    };
+
+})(window.JSFile);
+
+"use strict";
+
+window.JSFile = window.JSFile || {};
+
+(function(module) {
+
+    /**
+     * Worksheet Model
+     *
+     * @param data
+     * @constructor
+     */
+    module.Worksheet = function(data) {
+
+        var self = this;
+
+        this['!merges'] = [];
+        this['!ref'] = [];
+
+        // transform headers array
+        var headers = module.FileUtil.transformWorksheetHeadersArray(data.headers);
+
+        // count letters
+        var letter_count = [];
+        _.forEach(headers, function (item, key, obj) {
+            letter_count.push(item.length);
+        });
+
+        // calculate worksheet merges
+        this['!merges'] = module.FileUtil.calculateWorksheetHeadersMerges(headers);
+
+        // set body row starting point
+        var cell_number = headers.length + 1;
+
+        // convert header array to object
+        headers = module.FileUtil.convertWorksheetHeadersArrayToObject(headers);
+
+        // set worksheet header data
+        _.forEach(headers, function (value, key, obj) {
+
+            // TODO: add column type support
+            self[key] = {t: 's', v: value};
+        });
+
+        // set worksheet body data
+
+        _.forEach(data.data, function(row) {
+
+            var cell_letter = 'A';
+            var _letter_count = 0;
+
+            _.forEach(row, function(item) {
+
+                // add data
+                self[cell_letter + cell_number] = {v: item.value, t: 's'};
+
+                // increment letter
+                cell_letter = module.FileUtil.nextLetter(cell_letter);
+
+                // count letters
+                _letter_count++;
+            });
+
+            letter_count.push(_letter_count);
+
+            // increment cell number
+            cell_number++;
+        });
+
+        // get highest letter
+        var highest_letter = _.max(letter_count);
+
+        // set worksheet range
+        this['!ref'] = XLSX.utils.encode_range({
+            s: {c: 0, r: 0}, // start
+            e: {c: (highest_letter - 1), r: (cell_number - 2)} // end
+        });
+        
+    };
+
+})(window.JSFile);
+
+"use strict";
+
+window.JSFile = window.JSFile || {};
+
+(function(module) {
+
+    /**
+     * FileDownloader Class
+     *
+     * @constructor
+     */
+    var FileDownloader = function() {
+
+        var self = this;
+
+        /**
+         * downloadWorkbook
+         *
+         * @param workbook
+         * @param file_name
+         */
+        this.downloadWorkbook = function(workbook, file_name) {
+
+            if (!file_name) {
+                file_name = 'download.xlsx';
+            }
+
+            if (!_.endsWith(file_name, '.xlsx')) {
+                file_name += '.xlsx';
+            }
+
+            // TODO: add config to specify output format
+            var workbook_output = XLSX.write(workbook, {bookType:'xlsx', bookSST:false, type: 'binary'});
+            var array_buffer = convertStringToArrayBuffer(workbook_output);
+
+            downloadFile(file_name, array_buffer);
+        };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // helper methods
+        //
+        ///////////////////////////////////////////////////////////
+
+        /**
+         * convertStringToArrayBuffer
+         *
+         * @param str
+         * @returns {ArrayBuffer}
+         */
+        function convertStringToArrayBuffer(str) {
+            var array_buffer = new ArrayBuffer(str.length);
+            var view = new Uint8Array(array_buffer);
+            for (var i = 0; i != str.length; ++i) {
+                view[i] = str.charCodeAt(i) & 0xFF;
+            }
+            return array_buffer;
+        }
+
+        /**
+         * downloadFile (from Angular UI Data Grid)
+         * TODO: research this and clean up
+         *
+         * @param file_name
+         * @param array_buffer
+         * @returns {*}
+         */
+        var downloadFile = function (file_name, array_buffer) {
+
+            var D = document;
+            var a = D.createElement('a');
+            var strMimeType = 'application/octet-stream;charset=utf-8';
+            var rawFile;
+
+            // IE10+
+            if (navigator.msSaveBlob) {
+                return navigator.msSaveBlob(new Blob(["\ufeff", array_buffer], {
+                    type: strMimeType
+                }), file_name);
+            }
+
+            //html5 A[download]
+            if ('download' in a) {
+
+                var blob = new Blob([array_buffer], {
+                    type: strMimeType
+                });
+                rawFile = URL.createObjectURL(blob);
+                a.setAttribute('download', file_name);
+            } else {
+                rawFile = 'data:' + strMimeType + ',' + encodeURIComponent(array_buffer);
+                a.setAttribute('target', '_blank');
+            }
+
+            a.href = rawFile;
+            a.setAttribute('style', 'display:none;');
+            D.body.appendChild(a);
+            setTimeout(function() {
+                if (a.click) {
+                    a.click();
+                    // Workaround for Safari 5
+                } else if (document.createEvent) {
+                    var eventObj = document.createEvent('MouseEvents');
+                    eventObj.initEvent('click', true, true);
+                    a.dispatchEvent(eventObj);
+                }
+                D.body.removeChild(a);
+
+            }, 100);
+        };
+    };
+
+    module.FileDownloader = new FileDownloader();
+
+})(window.JSFile);
