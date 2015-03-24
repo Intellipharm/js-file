@@ -1,0 +1,44 @@
+<html>
+<head>
+    <title>JSFile : AngularJS UI-Grid Example</title>
+    <link rel="stylesheet" href="../bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../bower_components/angular-ui-grid/ui-grid.min.css">
+    <link rel="stylesheet" href="../styles/global.css">
+</head>
+<body ng-app="App" ng-controller="AppController as app">
+
+<div class="row">
+    <div class="col-xs-12 description">
+        <h2>AngularJS UI-Grid Example</h2>
+    </div>
+</div><!--/.row-->
+
+<div class="row">
+    <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well">
+
+        <div id="grid1" ui-grid="grid_options" class="grid" ui-grid-exporter></div>
+
+    </div>
+</div><!--/.row-->
+
+<!-- dependencies -->
+<script src="../bower_components/modernizr/modernizr.js"></script>
+<script src="../bower_components/lodash/lodash.min.js"></script>
+<script src="../bower_components/angular/angular.min.js"></script>
+<script src="../bower_components/js-xls/dist/xls.min.js"></script>
+<script src="../bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+<script src="../bower_components/angular-ui-grid/ui-grid.min.js"></script>
+
+<!-- JS File -->
+<script src="../../../src/scripts/utils/file-util.js"></script>
+<script src="../../../src/scripts/models/workbook-model.js"></script>
+<script src="../../../src/scripts/models/worksheet-model.js"></script>
+<script src="../../../src/scripts/file-creator/file-creator-service.js"></script>
+<script src="../../../src/scripts/file-downloader/file-downloader-service.js"></script>
+
+<!-- example app -->
+<script src="scripts/app.js"></script>
+<script src="scripts/app-controller.js"></script>
+
+</body>
+</html>

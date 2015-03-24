@@ -2,8 +2,6 @@
 
 (function () {
 
-	angular.module('App', [
-		'AngularDynamicForm'
-	]);
+    angular.module('App', []);
 
 })();
