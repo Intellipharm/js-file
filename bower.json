@@ -1,7 +1,7 @@
 {
-    "name": "js-file-uploader-and-downloader",
-    "version": "0.0.1",
-    "homepage": "https://github.com/Intellipharm/js-file-uploader-and-downloader",
+    "name": "js-file",
+    "version": "0.0.2",
+    "homepage": "https://github.com/Intellipharm/js-file",
     "authors": [
         "Intellipharm <damian@intellipharm.com.au>",
         "Neil Russell <neilrusell6@gmail.com.au>",
@@ -9,8 +9,8 @@
     ],
     "description": "A JavaScript File Uploader & Downloader.",
     "main": [
-        "dist/js-file-uploader-and-downloader.js",
-        "dist/js-file-uploader-and-downloader.min.js"
+        "dist/js-file.js",
+        "dist/js-file.min.js"
     ],
     "moduleType": [
         "globals"

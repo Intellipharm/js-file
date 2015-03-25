@@ -1,6 +1,6 @@
 {
-    "name": "js-file-uploader-and-downloader",
-    "version": "0.0.1",
+    "name": "js-file",
+    "version": "0.0.2",
     "dependencies": {},
     "devDependencies": {
         "glob": "~4.3.5",

@@ -6,6 +6,7 @@ module.exports = {
     'dist-js': {
     	dest: '<%= config.dist %>/js-file.js',
         src: [
+            '<%= config.src %>/scripts/js-file.js',
             '<%= config.src %>/scripts/utils/file-util.js',
             '<%= config.src %>/scripts/models/workbook-model.js',
             '<%= config.src %>/scripts/models/worksheet-model.js',

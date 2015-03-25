@@ -7,6 +7,7 @@ module.exports = function (grunt) {
 			},
 			files: {
 				'<%= config.dist %>/js-file.min.js': [
+                    '<%= config.src %>/scripts/js-file.js',
                     '<%= config.src %>/scripts/utils/file-util.js',
                     '<%= config.src %>/scripts/models/workbook-model.js',
                     '<%= config.src %>/scripts/models/worksheet-model.js',
