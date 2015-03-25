@@ -371,8 +371,10 @@ window.JSFile = window.JSFile || {};
      */
     module.Workbook = function(data) {
 
+        var MESSAGE_DATA_IS_REQUIRED = "data param is required for Workbook model";
+
         if (_.isUndefined(data) || _.isNull(data)) {
-            throw new Error()
+            throw new Error(MESSAGE_DATA_IS_REQUIRED);
         }
 
         var self = this;
@@ -407,6 +409,12 @@ window.JSFile = window.JSFile || {};
      */
     module.Worksheet = function(data) {
 
+        var MESSAGE_DATA_IS_REQUIRED = "data param is required for Worksheet model";
+
+        if (_.isUndefined(data) || _.isNull(data)) {
+            throw new Error(MESSAGE_DATA_IS_REQUIRED);
+        }
+
         var self = this;
 
         this['!merges'] = [];
@@ -433,8 +441,8 @@ window.JSFile = window.JSFile || {};
         // set worksheet header data
         _.forEach(headers, function (value, key, obj) {
 
-            // TODO: add column type support
-            self[key] = {t: 's', v: value};
+            // TODO: add column type support (new module.WorksheetCell({type: "s"})
+            self[key] = new module.WorksheetCell({type: 's', value: value});
         });
 
         // set worksheet body data
@@ -447,7 +455,7 @@ window.JSFile = window.JSFile || {};
             _.forEach(row, function(item) {
 
                 // add data
-                self[cell_letter + cell_number] = {v: item.value, t: 's'};
+                self[cell_letter + cell_number] = new module.WorksheetCell({type: 's', value: item.value});
 
                 // increment letter
                 cell_letter = module.FileUtil.nextLetter(cell_letter);
@@ -482,6 +490,36 @@ window.JSFile = window.JSFile || {};
 (function(module) {
 
     /**
+     * WorksheetCell Model
+     *
+     * @param data
+     * @constructor
+     */
+    module.WorksheetCell = function(data) {
+
+        var MESSAGE_DATA_IS_REQUIRED = "data param is required for WorksheetCell model";
+        var MESSAGE_VALUE_IS_REQUIRED = "data.value param is required for WorksheetCell model";
+
+        if (_.isUndefined(data) || _.isNull(data)) {
+            throw new Error(MESSAGE_DATA_IS_REQUIRED);
+        }
+        if (!_.has(data, 'value')) {
+            throw new Error(MESSAGE_VALUE_IS_REQUIRED);
+        }
+
+        this.t = _.has(data, 'type') ? data.type : 's';
+        this.v = data.value;
+    };
+
+})(window.JSFile);
+
+"use strict";
+
+window.JSFile = window.JSFile || {};
+
+(function(module) {
+
+    /**
      * FileDownloader Class
      *
      * @constructor
@@ -489,6 +527,9 @@ window.JSFile = window.JSFile || {};
     var FileDownloader = function() {
 
         var self = this;
+
+        this.MESSAGE_WORKBOOK_IS_REQUIRED = "workbook param is required for FileDownloader.downloadWorkbook";
+        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID = "workbook param my be an instance of JSFile.Workbook";
 
         /**
          * downloadWorkbook
@@ -498,7 +539,16 @@ window.JSFile = window.JSFile || {};
          */
         this.downloadWorkbook = function(workbook, file_name) {
 
-            if (!file_name) {
+            // validate args
+            if (_.isUndefined(workbook) || _.isNull(workbook)) {
+                throw new Error(this.MESSAGE_WORKBOOK_IS_REQUIRED);
+            }
+            if (!(workbook instanceof module.Workbook)) {
+                throw new Error(this.MESSAGE_WORKBOOK_MODEL_IS_INVALID);
+            }
+
+            // arg defaults
+            if (_.isUndefined(file_name)) {
                 file_name = 'download.xlsx';
             }
 
@@ -506,8 +556,9 @@ window.JSFile = window.JSFile || {};
                 file_name += '.xlsx';
             }
 
+            // initiate file download
             // TODO: add config to specify output format
-            var workbook_output = XLSX.write(workbook, {bookType:'xlsx', bookSST:false, type: 'binary'});
+            var workbook_output = XLSX.write(workbook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
             var array_buffer = convertStringToArrayBuffer(workbook_output);
 
             downloadFile(file_name, array_buffer);
