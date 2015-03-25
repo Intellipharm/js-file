@@ -248,19 +248,19 @@ window.JSFile = window.JSFile || {};
             var keys = _.keys(data);
 
             // name
-            if (!_.has(data, 'columns')) {
+            if (!_.has(data, 'columns') || _.isUndefined(data.columns)) {
                 data.columns = findAlternativeData(data, keys, data_alternatives.sheet.columns, []);
             }
             // data
-            if (!_.has(data, 'data')) {
+            if (!_.has(data, 'data') || _.isUndefined(data.data)) {
                 data.data = findAlternativeData(data, keys, data_alternatives.sheet.data, []);
             }
             // headers
-            if (!_.has(data, 'headers')) {
+            if (!_.has(data, 'headers') || _.isUndefined(data.headers)) {
                 data.headers = findAlternativeData(data, keys, data_alternatives.sheet.headers, []);
             }
             // name
-            if (!_.has(data, 'name')) {
+            if (!_.has(data, 'name') || _.isUndefined(data.name)) {
                 data.name = findAlternativeData(data, keys, data_alternatives.sheet.name, "sheet" + (index+1));
             }
 
