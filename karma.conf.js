@@ -28,6 +28,8 @@ module.exports = function(config) {
 			'src/scripts/utils/file-util.js',
 			'src/scripts/models/workbook-model.js',
 			'src/scripts/models/worksheet-model.js',
+			'src/scripts/models/worksheet-cell-model.js',
+			'src/scripts/file-downloader/file-downloader-service.js',
 
             // tests
 			'tests/**/*.js'

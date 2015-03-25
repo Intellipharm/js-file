@@ -13,6 +13,9 @@ window.JSFile = window.JSFile || {};
 
         var self = this;
 
+        this.MESSAGE_WORKBOOK_IS_REQUIRED = "workbook param is required for FileDownloader.downloadWorkbook";
+        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID = "workbook param my be an instance of JSFile.Workbook";
+
         /**
          * downloadWorkbook
          *
@@ -21,7 +24,16 @@ window.JSFile = window.JSFile || {};
          */
         this.downloadWorkbook = function(workbook, file_name) {
 
-            if (!file_name) {
+            // validate args
+            if (_.isUndefined(workbook) || _.isNull(workbook)) {
+                throw new Error(this.MESSAGE_WORKBOOK_IS_REQUIRED);
+            }
+            if (!(workbook instanceof module.Workbook)) {
+                throw new Error(this.MESSAGE_WORKBOOK_MODEL_IS_INVALID);
+            }
+
+            // arg defaults
+            if (_.isUndefined(file_name)) {
                 file_name = 'download.xlsx';
             }
 
@@ -29,8 +41,9 @@ window.JSFile = window.JSFile || {};
                 file_name += '.xlsx';
             }
 
+            // initiate file download
             // TODO: add config to specify output format
-            var workbook_output = XLSX.write(workbook, {bookType:'xlsx', bookSST:false, type: 'binary'});
+            var workbook_output = XLSX.write(workbook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
             var array_buffer = convertStringToArrayBuffer(workbook_output);
 
             downloadFile(file_name, array_buffer);

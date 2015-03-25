@@ -12,6 +12,12 @@ window.JSFile = window.JSFile || {};
      */
     module.Worksheet = function(data) {
 
+        var MESSAGE_DATA_IS_REQUIRED = "data param is required for Worksheet model";
+
+        if (_.isUndefined(data) || _.isNull(data)) {
+            throw new Error(MESSAGE_DATA_IS_REQUIRED);
+        }
+
         var self = this;
 
         this['!merges'] = [];
@@ -38,8 +44,8 @@ window.JSFile = window.JSFile || {};
         // set worksheet header data
         _.forEach(headers, function (value, key, obj) {
 
-            // TODO: add column type support
-            self[key] = {t: 's', v: value};
+            // TODO: add column type support (new module.WorksheetCell({type: "s"})
+            self[key] = new module.WorksheetCell({type: 's', value: value});
         });
 
         // set worksheet body data
@@ -52,7 +58,7 @@ window.JSFile = window.JSFile || {};
             _.forEach(row, function(item) {
 
                 // add data
-                self[cell_letter + cell_number] = {v: item.value, t: 's'};
+                self[cell_letter + cell_number] = new module.WorksheetCell({type: 's', value: item.value});
 
                 // increment letter
                 cell_letter = module.FileUtil.nextLetter(cell_letter);

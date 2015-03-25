@@ -12,8 +12,10 @@ window.JSFile = window.JSFile || {};
      */
     module.Workbook = function(data) {
 
+        var MESSAGE_DATA_IS_REQUIRED = "data param is required for Workbook model";
+
         if (_.isUndefined(data) || _.isNull(data)) {
-            throw new Error()
+            throw new Error(MESSAGE_DATA_IS_REQUIRED);
         }
 
         var self = this;
