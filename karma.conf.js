@@ -20,6 +20,7 @@ module.exports = function(config) {
 			'bower_components/lodash/lodash.min.js',
 			'bower_components/js-xls/dist/xls.min.js',
 			'bower_components/js-xlsx/dist/xlsx.full.min.js',
+			'bower_components/js-xlsx/dist/ods.js',
 
             // test data
             'tests-data/*.js',
@@ -30,6 +31,7 @@ module.exports = function(config) {
 			'src/scripts/models/worksheet-model.js',
 			'src/scripts/models/worksheet-cell-model.js',
 			'src/scripts/file-downloader/file-downloader-service.js',
+			'src/scripts/file-reader/file-reader-service.js',
 
             // tests
 			'tests/**/*.js'

@@ -1,0 +1,139 @@
+<html>
+<head>
+	<title>JSFile.FileReader : Simple Example</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../styles/global.css">
+</head>
+<body ng-app="App" ng-controller="AppController as app">
+
+<div class="row">
+	<div class="col-xs-12 description">
+		<h2>JSFile.FileReader</h2>
+        <h3>simple examples</h3>
+	</div>
+</div><!--/.row-->
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well">
+
+        <form>
+            <div class="form-group">
+                <label>Worksheet Heading Row</label>
+                <select class="form-control" ng-model="worksheet_headings_option">
+                    <option value="0">Select individually</option>
+                    <option value="1">All Worksheets have a heading row</option>
+                    <option value="0">No Worksheets have a heading row</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+
+                <input type="file" class="form-control"
+                       angularjs-file-upload
+                       file-name="upload_file.name"
+                       file-type="upload_file.type"
+                       file-data="upload_file.data">
+            </div>
+        </form>
+
+	</div>
+
+    <br/>
+
+	<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well" ng-if="upload_file.name">
+
+        <table class="table">
+            <tr>
+                <td><strong>name</strong></td>
+                <td>{{upload_file.name}}</td>
+            </tr>
+            <tr>
+                <td><strong>type</strong></td>
+                <td>{{upload_file.type}}</td>
+            </tr>
+            <tr>
+                <td><strong>calculated type</strong></td>
+                <td>{{calculated_type}}</td>
+            </tr>
+        </table>
+
+        <div ng-if="message">
+            <br/>
+
+            {{message}}
+        </div>
+
+        <div ng-if="worksheet_names && calculated_type != 'txt' && calculated_type != 'csv'">
+
+            <div class="row" ng-repeat="name in worksheet_names">
+                <div class="col-xs-4">{{name}}</div>
+                <label class="col-xs-4">has headings?</label>
+                <input class="col-xs-4" type="checkbox" ng-model="file_sheet_has_headings[$index]">
+
+            </div>
+
+            <div class="row">
+                <div class="col-xs-12">
+                    <button class="btn btn-default" ng-click="readFile()">Read File</button>
+                </div>
+            </div>
+
+        </div>
+
+	</div>
+
+    <br/>
+
+    <div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well" ng-if="result">
+
+
+        <div ng-repeat="item in result">
+            <h3>{{item.name}}</h3>
+
+            <table class="table">
+                <thead>
+                <tr>
+                    <th ng-repeat="heading in item.headings">{{heading}}</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="row in item.data">
+                    <td ng-repeat="column in row">{{column}}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div><!--/.row-->
+
+
+<!-- dependencies -->
+<script src="../../bower_components/modernizr/modernizr.js"></script>
+<script src="../../bower_components/lodash/lodash.min.js"></script>
+<script src="../../bower_components/angular/angular.min.js"></script>
+<script src="../../bower_components/js-xls/dist/xls.min.js"></script>
+<script src="../../bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+<script src="../../bower_components/js-xlsx/dist/ods.js"></script>
+
+<!-- JS File -->
+<script src="../../../../src/scripts/modernizr.js"></script>
+<script src="../../../../src/scripts/js-file.js"></script>
+<script src="../../../../src/scripts/utils/file-util.js"></script>
+<script src="../../../../src/scripts/models/workbook-model.js"></script>
+<script src="../../../../src/scripts/models/worksheet-model.js"></script>
+<script src="../../../../src/scripts/models/worksheet-cell-model.js"></script>
+<script src="../../../../src/scripts/file-downloader/file-downloader-service.js"></script>
+<script src="../../../../src/scripts/file-reader/file-reader-service.js"></script>
+
+<!-- AngularJS InputFileReader -->
+<script src="scripts/angularjs-file-upload/angularjs-file-upload.js"></script>
+<script src="scripts/angularjs-file-upload/angularjs-file-upload-settings.js"></script>
+<script src="scripts/angularjs-file-upload/angularjs-file-upload-directive.js"></script>
+
+<!-- example app -->
+<script src="scripts/app.js"></script>
+<script src="scripts/app-controller.js"></script>
+
+</body>
+</html>
