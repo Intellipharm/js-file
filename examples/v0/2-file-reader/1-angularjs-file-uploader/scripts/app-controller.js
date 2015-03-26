@@ -46,12 +46,12 @@
 
                 // not txt or csv && specify if each worksheet has headings individually
                 if (!_.includes(['txt', 'csv'], $scope.calculated_type) && $scope.worksheet_headings_option === 0) {
-                    //
-                    //$scope.worksheet_names = window.JSFile.FileReader.getWorksheetNames(value.data, $scope.calculated_type);
-                    //
-                    //_.forEach($scope.worksheet_names, function (item, index) {
-                    //    $scope.file_sheet_has_headings[index] = false;
-                    //});
+
+                    $scope.worksheet_names = window.JSFile.FileReader.getWorksheetNames(value.data, $scope.calculated_type);
+
+                    _.forEach($scope.worksheet_names, function (item, index) {
+                        $scope.file_sheet_has_headings[index] = false;
+                    });
                 }
 
                 // already specified if each worksheet has headings now

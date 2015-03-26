@@ -27,20 +27,21 @@
 
             var data = types[type]();
 
-            //var FileCreator     = window.JSFile.FileCreator;
-            var FileDownloader  = window.JSFile.FileDownloader;
-            //var workbook        = FileCreator.createWorkbook(data);
-
+            // create new Workbook instance
             var workbook = new window.JSFile.Workbook(data);
 
-
-            FileDownloader.downloadWorkbook(workbook, filename);
+            // initiate download
+            window.JSFile.FileDownloader.downloadWorkbook(workbook, filename);
         };
     };
 
     AppController.$inject = ['$scope'];
 
     angular.module('App').controller('AppController', AppController);
+
+    //-------------------------
+    // sample data
+    //-------------------------
 
     var uigrid_data = [
         {

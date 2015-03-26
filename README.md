@@ -21,7 +21,7 @@ bower install js-file --save
 
 #### To create an xlxs workbook
 
-Call window.JSFile.FileCreator.createWorkbook with the following data structure:
+Create an instance of window.JSFile.Workbook, and pass the following data as the first argument:
 
 ```js
 [
@@ -60,27 +60,25 @@ Call window.JSFile.FileCreator.createWorkbook with the following data structure:
 
 #### To download an xlxs workbook
 
-Call window.JSFile.FileDownloader.downloadWorkbook with the result of the above method.
+Call window.JSFile.FileDownloader.downloadWorkbook with the result of the above method as the first argument, and whatever you want the file to be called as the second argument.
 
 
-## API
-
-### JSFile.Workbook(data)
+## JSFile.Workbook
 
 Model used to create workbook.
 
 
-### JSFile.FileDownloader
+## JSFile.FileDownloader API
 
-#### public constants
+### public constants
 
 MESSAGE_WORKBOOK_IS_REQUIRED
 MESSAGE_WORKBOOK_MODEL_IS_INVALID
 
 
-#### public methods
+### public methods
 
-###### downloadWorkbook(workbook, filename)
+#### downloadWorkbook(workbook, filename)
 
 Initiates a download when passed an instance of the JSFile.Workbook model.
 
@@ -90,9 +88,9 @@ Initiates a download when passed an instance of the JSFile.Workbook model.
 | filename   | string           | Name of the file                                               |
 
 
-## JSFile.FileReader
+## JSFile.FileReader API
 
-#### public constants
+### public constants
 
 MESSAGE_FILE_DATA_IS_REQUIRED
 MESSAGE_FILE_TYPE_IS_REQUIRED
@@ -100,9 +98,9 @@ MESSAGE_UNSUPPORTED_FILE_TYPE
 MESSAGE_FILE_READ_ERROR
 
 
-#### public methods
+### public methods
 
-###### getFileType(type)
+#### getFileType(type)
 
 Returns a file type (either xlxs, xlx, csv, ods or txt) by matching provided argument to list of known file types.
 
@@ -111,7 +109,7 @@ Returns a file type (either xlxs, xlx, csv, ods or txt) by matching provided arg
 | type   | string  | File type to use when matching against list  |
 
 
-###### getWorksheetNames(file_data, file_type)
+#### getWorksheetNames(file_data, file_type)
 
 Returns a list of worksheet names.
 
@@ -121,7 +119,7 @@ Returns a list of worksheet names.
 | file_type | string  | Type of file_data                            |
 
 
-###### fileToArray(file_data, file_type)
+#### fileToArray(file_data, file_type)
 
 Converts a file into a javascript array. Currently supports xlxs, xlx, csv, ods, txt.
 
