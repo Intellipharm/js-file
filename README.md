@@ -2,8 +2,10 @@
 
 JSFile handles file creation, downloading and reading in the browser using the SheetJS/JS-XLXS & SheetJS/JS-XLX libraries.
 
+
 ## Dependencies
 js-file depends on [Lodash](https://github.com/lodash/lodash), [js-xlsx](https://github.com/SheetJS/js-xlsx), [js-xls](https://github.com/SheetJS/js-xls) 
+
 
 ## Installation
 
@@ -60,23 +62,23 @@ Call window.JSFile.FileCreator.createWorkbook with the following data structure:
 
 Call window.JSFile.FileDownloader.downloadWorkbook with the result of the above method.
 
+
 ## API
 
-#### JSFile.Workbook(data)
+### JSFile.Workbook(data)
 
 Model used to create workbook.
 
 
-#### JSFile.FileCreator
+### JSFile.FileDownloader
 
-###### createWorkbook(data)
+#### public constants
 
-| param  | type   | description                                  |
-| ------ | ------ | -------------------------------------------- |
-| data   | array  | Data to use when creating the workbook       |
+MESSAGE_WORKBOOK_IS_REQUIRED
+MESSAGE_WORKBOOK_MODEL_IS_INVALID
 
 
-#### JSFile.FileDownloader
+#### public methods
 
 ###### downloadWorkbook(workbook, filename)
 
@@ -88,6 +90,44 @@ Initiates a download when passed an instance of the JSFile.Workbook model.
 | filename   | string           | Name of the file                                               |
 
 
-#### JSFile.FileReader
+## JSFile.FileReader
 
-Converts a file into json. Curently only supports xlxs, xlx, csv, ods.
+#### public constants
+
+MESSAGE_FILE_DATA_IS_REQUIRED
+MESSAGE_FILE_TYPE_IS_REQUIRED
+MESSAGE_UNSUPPORTED_FILE_TYPE
+MESSAGE_FILE_READ_ERROR
+
+
+#### public methods
+
+###### getFileType(type)
+
+Returns a file type (either xlxs, xlx, csv, ods or txt) by matching provided argument to list of known file types.
+
+| param  | type    | description                                  |
+| ------ | ------- | -------------------------------------------- |
+| type   | string  | File type to use when matching against list  |
+
+
+###### getWorksheetNames(file_data, file_type)
+
+Returns a list of worksheet names.
+
+| param     | type    | description                                  |
+| --------- | ------- | -------------------------------------------- |
+| file_data | object  | Data to read and analyse                     |
+| file_type | string  | Type of file_data                            |
+
+
+###### fileToArray(file_data, file_type)
+
+Converts a file into a javascript array. Currently supports xlxs, xlx, csv, ods, txt.
+
+| param                  | type           | description                                        |
+| ---------------------- | -------------- | -------------------------------------------------- |
+| file_data              | object         | Data to read and convert to array                  |
+| file_type              | string         | Type of file_data                                  |
+| worksheet_has_headings | array|boolean  | whether or not sheet/s has/have a heading row      |
+| group_by               | string         | how to group the data (row or column) *coming soon |

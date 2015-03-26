@@ -62,7 +62,7 @@ window.JSFile = window.JSFile || {};
          * @param str
          * @returns {ArrayBuffer}
          */
-        function convertStringToArrayBuffer(str) {
+        var convertStringToArrayBuffer = function(str) {
             var array_buffer = new ArrayBuffer(str.length);
             var view = new Uint8Array(array_buffer);
             for (var i = 0; i != str.length; ++i) {
@@ -74,6 +74,7 @@ window.JSFile = window.JSFile || {};
         /**
          * downloadFile (from Angular UI Data Grid)
          * TODO: research this and clean up
+         * TODO: update to support Safari (try FileSaver.js)
          *
          * @param file_name
          * @param array_buffer
