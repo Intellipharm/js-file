@@ -81,15 +81,14 @@ Initiates a download when passed an instance of the JSFile.Workbook model.
 | file_extension   | string           | Extension of the file (Optional)                               |
 
 
-#### initiateFileDownloadFallback(file_array_buffer, filename, file_mimetype)
+#### initiateFileDownloadFallback(bob, filename)
 
 Externally provided fallback method when Modernizr.adownload fails
 
 | param             | type     | description                   |
 | ----------------- | -------- | ----------------------------- |
-| file_array_buffer | string   | array buffer of file          |
+| blob              | Blob     | file blobs                    |
 | filename          | string   | filename incuding extension   |
-| file_mimetype     | string   | file mimetype                 |
 
 
 ## JSFile.FileReader API
