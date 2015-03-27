@@ -1,0 +1,46 @@
+<html>
+<head>
+	<title>JSFile.FileDownloader : download fallback example</title>
+	<link rel="stylesheet" href="../../bower_components/bootstrap/dist/css/bootstrap.min.css">
+	<link rel="stylesheet" href="../../styles/global.css">
+</head>
+<body ng-app="App" ng-controller="AppController as app">
+
+<div class="row">
+	<div class="col-xs-12 description">
+		<h2>JSFile.FileDownloader</h2>
+        <h3>download fallback example</h3>
+	</div>
+</div><!--/.row-->
+
+
+<div class="row">
+	<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well">
+
+        <button class="btn btn-primary" ng-click="app.download()">DOWNLOAD</button>
+
+        <br/>
+        <br/>
+
+        <p>{{message}}</p>
+
+	</div>
+</div><!--/.row-->
+
+<!-- dependencies -->
+<script src="../../bower_components/modernizr/modernizr.js"></script>
+<script src="../../bower_components/lodash/lodash.min.js"></script>
+<script src="../../bower_components/angular/angular.min.js"></script>
+<script src="../../bower_components/js-xls/dist/xls.min.js"></script>
+<script src="../../bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+<script src="../../bower_components/file-saver/FileSaver.min.js"></script>
+
+<!-- JS File -->
+<script src="../../../../dist/js-file.min.js"></script>
+
+<!-- example app -->
+<script src="scripts/app.js"></script>
+<script src="scripts/app-controller.js"></script>
+
+</body>
+</html>
