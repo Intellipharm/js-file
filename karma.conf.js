@@ -40,9 +40,7 @@ module.exports = function(config) {
 			'src/scripts/file-reader/file-reader-service.js',
 
             // tests
-			//'tests/**/*.js'
-			'tests/utils/file-util.test.js',
-            'tests/file-downloader/file-downloader-service.test.js'
+			'tests/**/*.js'
 		],
 
 		// list of files to exclude
