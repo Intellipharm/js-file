@@ -167,10 +167,16 @@ window.JSFile = window.JSFile || {};
          * @returns {Array}
          */
         var xlsToArray = function(data, worksheet_has_headings, group_by) {
+
+            // dependency check
+            if (typeof window.XLS === 'undefined') {
+                throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
+            }
+
             var result = [];
 
             try {
-                var workbook_data = XLS.read(data, {type: 'binary'});
+                var workbook_data = window.XLS.read(data, {type: 'binary'});
                result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
             } catch (error) {
                 throw new Error(this.MESSAGE_FILE_READ_ERROR);
