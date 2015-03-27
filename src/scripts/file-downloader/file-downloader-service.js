@@ -90,9 +90,6 @@ window.JSFile = window.JSFile || {};
          */
         var createXlsxFile = function(workbook, file_extension) {
             var workbook_output = XLSX.write(workbook, {bookType: file_extension, bookSST: false, type: 'binary'});
-
-            console.log(XLSX);
-
             return convertStringToArrayBuffer(workbook_output);
         };
 

@@ -7,9 +7,6 @@ if (typeof _ === 'undefined') {
 if (typeof XLSX === 'undefined') {
     throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
 }
-if (typeof XLS === 'undefined') {
-    throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
-}
 if (typeof Blob === 'undefined') {
     throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
 }
