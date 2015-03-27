@@ -25,7 +25,7 @@
          * readFile
          */
         $scope.readFile = function() {
-            $scope.result = window.JSFile.FileReader.fileToArray($scope.file_data, $scope.calculated_type, $scope.file_sheet_has_headings);
+            $scope.result = window.JSFile.FileReader.fileToArray($scope.file_data, $scope.extension, $scope.file_sheet_has_headings);
         };
 
         //-------------------------
@@ -37,9 +37,10 @@
             if (_.has(value, 'name') && _.has(value, 'type') && _.has(value, 'data')) {
 
                 $scope.file_data = value.data;
-                $scope.calculated_type = window.JSFile.FileReader.getFileType(value.type);
+                $scope.extension = (/[.]/.exec(value.name)) ? /[^.]+$/.exec(value.name)[0] : null;
+                //$scope.extension = window.JSFile.FileUtil.getFileExtension(value.type);
 
-                if (_.isNull($scope.calculated_type)) {
+                if (_.isNull($scope.extension)) {
                     $scope.message = "Could not determine file type";
                     return false;
                 }
@@ -47,7 +48,7 @@
                 // not txt or csv && specify if each worksheet has headings individually
                 if (!_.includes(['txt', 'csv'], $scope.calculated_type) && $scope.worksheet_headings_option === 0) {
 
-                    $scope.worksheet_names = window.JSFile.FileReader.getWorksheetNames(value.data, $scope.calculated_type);
+                    $scope.worksheet_names = window.JSFile.FileReader.getWorksheetNames(value.data, $scope.extension);
 
                     _.forEach($scope.worksheet_names, function (item, index) {
                         $scope.file_sheet_has_headings[index] = false;
@@ -57,7 +58,7 @@
                 // already specified if each worksheet has headings now
                 else {
                     var all_file_sheet_have_headings = $scope.worksheet_headings_option == 1 ? true : false;
-                    $scope.result = window.JSFile.FileReader.fileToArray($scope.file_data, $scope.calculated_type, all_file_sheet_have_headings);
+                    $scope.result = window.JSFile.FileReader.fileToArray($scope.file_data, $scope.extension, all_file_sheet_have_headings);
                 }
             }
         }, true);

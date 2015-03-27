@@ -10,40 +10,6 @@ describe("FileReader", function() {
     });
 
     //--------------------------------------------
-    // getFileType
-    //--------------------------------------------
-
-    describe("getFileType", function() {
-
-        it("should throw an error if file_type is unsupported", function () {
-            expect(function () {
-                var result = Service.getFileType('asdasds');
-            }).toThrowError(Service.MESSAGE_UNSUPPORTED_FILE_TYPE);
-        });
-
-        it("should return txt", function () {
-            var result = Service.getFileType('text/plain');
-            expect(result).toEqual('txt');
-        });
-        it("should return csv", function () {
-            var result = Service.getFileType('text/csv');
-            expect(result).toEqual('csv');
-        });
-        it("should return xlsx", function () {
-            var result = Service.getFileType('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            expect(result).toEqual('xlsx');
-        });
-        it("should return xls", function () {
-            var result = Service.getFileType('application/vnd.ms-excel');
-            expect(result).toEqual('xls');
-        });
-        it("should return ods", function () {
-            var result = Service.getFileType('application/vnd.oasis.opendocument.spreadsheet');
-            expect(result).toEqual('ods');
-        });
-    });
-
-    //--------------------------------------------
     // getWorksheetNames
     //--------------------------------------------
 

@@ -1,3 +1,4 @@
+;window.Modernizr=function(a,b,c){function t(a){i.cssText=a}function u(a,b){return t(prefixes.join(a+";")+(b||""))}function v(a,b){return typeof a===b}function w(a,b){return!!~(""+a).indexOf(b)}function x(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:v(f,"function")?f.bind(d||b):f}return!1}var d="2.8.3",e={},f=b.documentElement,g="modernizr",h=b.createElement(g),i=h.style,j,k={}.toString,l={},m={},n={},o=[],p=o.slice,q,r={}.hasOwnProperty,s;!v(r,"undefined")&&!v(r.call,"undefined")?s=function(a,b){return r.call(a,b)}:s=function(a,b){return b in a&&v(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=p.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(p.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(p.call(arguments)))};return e});for(var y in l)s(l,y)&&(q=y.toLowerCase(),e[q]=l[y](),o.push((e[q]?"":"no-")+q));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)s(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof enableClasses!="undefined"&&enableClasses&&(f.className+=" "+(b?"":"no-")+a),e[a]=b}return e},t(""),h=j=null,e._version=d,e}(this,this.document),Modernizr.addTest("adownload","download"in document.createElement("a")),Modernizr.addTest("filereader",function(){return!!(window.File&&window.FileList&&window.FileReader)});
 "use strict";
 
 // dependency checks
@@ -7,8 +8,28 @@ if (typeof _ === 'undefined') {
 if (typeof XLSX === 'undefined') {
     throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
 }
+if (typeof XLS === 'undefined') {
+    throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
+}
 
-window.JSFile = {};
+window.JSFile = window.JSFile || {};
+"use strict";
+
+window.JSFile = window.JSFile || {};
+
+(function(module) {
+
+    // supported file types
+
+    module.supported_file_types = {
+        'txt': 'text/plain',
+        'csv': 'text/csv',
+        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        'xls': 'application/vnd.ms-excel',
+        'ods': 'application/vnd.oasis.opendocument.spreadsheet'
+    };
+
+})(window.JSFile);
 "use strict";
 
 window.JSFile = window.JSFile || {};
@@ -23,6 +44,13 @@ window.JSFile = window.JSFile || {};
     var FileUtil = function() {
 
         var self = this;
+        var message_prefix = "FileUtil: ";
+
+        this.MESSAGE_UNSUPPORTED_FILE_MIMETYPE      = message_prefix + "file mimetype is not supported";
+        this.MESSAGE_UNSUPPORTED_FILE_EXTENSION     = message_prefix + "file extension is not supported";
+        this.MESSAGE_FILE_NAME_IS_REQUIRED          = message_prefix + "file_name is required";
+        this.MESSAGE_FILE_EXTENSION_MISMATCH        = message_prefix + "the extension contained in the file_name argument does not match the file_extension argument";
+        this.MESSAGE_FILE_EXTENSION_IS_REQUIRED     = message_prefix + "an file extension must be provided, either as part of the filename or as the file_extension argument";
 
         // data alternatives (these will be used as replacements for missing data)
 
@@ -87,6 +115,55 @@ window.JSFile = window.JSFile || {};
             });
 
             return data;
+        };
+
+        /**
+         * transformFilenameAndExtension
+         *
+         * @param filename
+         * @param file_extension
+         * @returns {*}
+         */
+        this.transformFilenameAndExtension = function(filename, file_extension) {
+
+            if (_.isUndefined(filename) || _.isNull(filename) || filename === "") {
+                throw new Error(this.MESSAGE_FILE_NAME_IS_REQUIRED);
+            }
+
+            if (!_.isUndefined(file_extension) && !_.includes(_.keys(module.supported_file_types), file_extension)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+            }
+
+            // search filename for extension
+            var file_name_extension = /[^.]+$/.exec(filename);
+
+            // if possible filename extension matches supported extensions, then extract
+            if (_.includes(_.keys(module.supported_file_types), file_name_extension[0])) {
+
+                // extension found in file_name does not match file_extension
+                if (!_.isUndefined(file_extension) && file_name_extension[0] !== file_extension) {
+                    throw new Error(this.MESSAGE_FILE_EXTENSION_MISMATCH);
+                }
+
+                // remove extension from filename
+                filename  = /(.*)\.[^.]+$/.exec(filename)[1];
+
+                // set file_extension
+                file_extension = file_name_extension[0];
+            }
+
+            // if filename extension does not match supported extensions and no file_extension was provided
+            else if (_.isUndefined(file_extension)) {
+                throw new Error(this.MESSAGE_FILE_EXTENSION_IS_REQUIRED);
+            }
+
+            // add extension to filename
+            filename += '.' + file_extension;
+
+            return {
+                filename: filename,
+                file_extension: file_extension
+            };
         };
 
         /**
@@ -246,6 +323,45 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
+
+        /**
+         * getFileExtension
+         *
+         * @param mimetype
+         * @returns {*}
+         */
+        this.getFileExtension = function(file_mimetype) {
+
+            if (!_.includes(_.values(module.supported_file_types), file_mimetype)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_MIMETYPE);
+            }
+
+            return _.findKey(module.supported_file_types, function(n) {
+                return n === file_mimetype;
+            });
+        };
+
+        /**
+         * getFileMimeType
+         *
+         * @param file_extension
+         * @returns {*}
+         */
+        this.getFileMimeType = function(file_extension) {
+
+            if (!_.includes(_.keys(module.supported_file_types), file_extension)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+            }
+
+            return module.supported_file_types[file_extension];
+        };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // private methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * transformSheet
@@ -526,6 +642,24 @@ window.JSFile = window.JSFile || {};
 
 "use strict";
 
+// dependency checks
+if (typeof _ === 'undefined') {
+    throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
+}
+if (typeof XLSX === 'undefined') {
+    throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
+}
+if (typeof XLS === 'undefined') {
+    throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
+}
+if (typeof Blob === 'undefined') {
+    throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
+}
+if (typeof saveAs === 'undefined') {
+    throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
+}
+"use strict";
+
 window.JSFile = window.JSFile || {};
 
 (function(module) {
@@ -538,17 +672,29 @@ window.JSFile = window.JSFile || {};
     var FileDownloader = function() {
 
         var self = this;
+        var message_prefix = "FileDownloader: ";
 
-        this.MESSAGE_WORKBOOK_IS_REQUIRED = "workbook param is required for FileDownloader.downloadWorkbook";
-        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID = "workbook param my be an instance of JSFile.Workbook";
+        this.MESSAGE_WORKBOOK_IS_REQUIRED       = message_prefix + "workbook param is required for FileDownloader.downloadWorkbook";
+        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID  = message_prefix + "workbook param must be an instance of JSFile.Workbook";
+        this.MESSAGE_FILE_NAME_IS_REQUIRED      = message_prefix + "file_name is required";
+        this.CURRENTLY_UNSUPPORTED_FILE_TYPE    = message_prefix + "this file type is currently not supported.";
+        this.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK = message_prefix + "browser does support the required feature and no fallback method was provided";
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // public methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * downloadWorkbook
          *
          * @param workbook
-         * @param file_name
+         * @param filename
+         * @param file_extension
          */
-        this.downloadWorkbook = function(workbook, file_name) {
+        this.downloadWorkbook = function(workbook, filename, file_extension) {
 
             // validate args
             if (_.isUndefined(workbook) || _.isNull(workbook)) {
@@ -557,28 +703,27 @@ window.JSFile = window.JSFile || {};
             if (!(workbook instanceof module.Workbook)) {
                 throw new Error(this.MESSAGE_WORKBOOK_MODEL_IS_INVALID);
             }
-
-            // arg defaults
-            if (_.isUndefined(file_name)) {
-                file_name = 'download.xlsx';
+            if (_.isUndefined(filename) || _.isNull(filename) || filename === "") {
+                throw new Error(this.MESSAGE_FILE_NAME_IS_REQUIRED);
             }
 
-            if (!_.endsWith(file_name, '.xlsx')) {
-                file_name += '.xlsx';
-            }
+            // transform file data (name & extension)
+            var file_data = module.FileUtil.transformFilenameAndExtension(filename, file_extension);
 
-            // initiate file download
-            // TODO: add config to specify output format
-            var workbook_output = XLSX.write(workbook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
-            var array_buffer = convertStringToArrayBuffer(workbook_output);
+            // create file array buffer
+            var file_array_buffer = this.create_file_handlers[file_data['file_extension']](workbook, file_data['file_extension']);
 
-            downloadFile(file_name, array_buffer);
+            // get file mime_type
+            var file_mimetype = module.FileUtil.getFileMimeType(file_data['file_extension']);
+
+            // initiate download
+            initiateFileDownload(file_array_buffer, file_data['filename'], file_mimetype);
         };
 
 
         ///////////////////////////////////////////////////////////
         //
-        // helper methods
+        // private methods
         //
         ///////////////////////////////////////////////////////////
 
@@ -588,65 +733,126 @@ window.JSFile = window.JSFile || {};
          * @param str
          * @returns {ArrayBuffer}
          */
-        function convertStringToArrayBuffer(str) {
+        var convertStringToArrayBuffer = function(str) {
             var array_buffer = new ArrayBuffer(str.length);
             var view = new Uint8Array(array_buffer);
             for (var i = 0; i != str.length; ++i) {
                 view[i] = str.charCodeAt(i) & 0xFF;
             }
             return array_buffer;
-        }
+        };
 
         /**
-         * downloadFile (from Angular UI Data Grid)
-         * TODO: research this and clean up
+         * createXlsxFile
          *
-         * @param file_name
-         * @param array_buffer
-         * @returns {*}
+         * @param workbook
+         * @param file_extension
          */
-        var downloadFile = function (file_name, array_buffer) {
+        var createXlsxFile = function(workbook, file_extension) {
+            var workbook_output = XLSX.write(workbook, {bookType: file_extension, bookSST: false, type: 'binary'});
 
-            var D = document;
-            var a = D.createElement('a');
-            var strMimeType = 'application/octet-stream;charset=utf-8';
-            var rawFile;
+            console.log(XLSX);
 
-            // IE10+
-            if (navigator.msSaveBlob) {
-                return navigator.msSaveBlob(new Blob(["\ufeff", array_buffer], {
-                    type: strMimeType
-                }), file_name);
+            return convertStringToArrayBuffer(workbook_output);
+        };
+
+        /**
+         * createOdsFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createOdsFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createXlsFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createXlsFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createTxtFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createTxtFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createCsvFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createCsvFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * initiateFileDownload
+         *
+         * @param array_buffer
+         * @param filename
+         * @param file_mimetype
+         */
+        var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
+
+            // Blob is natively supported by all but ie8 & ie9
+            // Blob.js creates a shim for ie8 & ie9
+            // TODO: add seperate handling for text & csv
+
+            // if browser is IE10+
+            if (window.navigator.msSaveBlob) {
+
+                // create ie10 Blob
+                var blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
+
+                // initiate ie10 download
+                return window.navigator.msSaveBlob(blob, filename);
             }
 
-            //html5 A[download]
-            if ('download' in a) {
+            // create Blob
+            var blob = new Blob([file_array_buffer], {type: file_mimetype});
 
-                var blob = new Blob([array_buffer], {
-                    type: strMimeType
-                });
-                rawFile = URL.createObjectURL(blob);
-                a.setAttribute('download', file_name);
-            } else {
-                rawFile = 'data:' + strMimeType + ',' + encodeURIComponent(array_buffer);
-                a.setAttribute('target', '_blank');
-            }
+            // adownload is not supported by browser (ie8, ie9, Safari)
+            if (!Modernizr.adownload) {
 
-            a.href = rawFile;
-            a.setAttribute('style', 'display:none;');
-            D.body.appendChild(a);
-            setTimeout(function() {
-                if (a.click) {
-                    a.click();
-                    // Workaround for Safari 5
-                } else if (document.createEvent) {
-                    var eventObj = document.createEvent('MouseEvents');
-                    eventObj.initEvent('click', true, true);
-                    a.dispatchEvent(eventObj);
+                // no initiateFileDownloadFallback method is defined
+                if (_.isUndefined(self.initiateFileDownloadFallback)) {
+                    throw new Error(self.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK);
                 }
-                D.body.removeChild(a);
 
-            }, 100);
+                // call initiate download fallback
+                return self.initiateFileDownloadFallback(blob, filename);
+            }
+
+            // initiate download
+            return window.saveAs(blob, filename);
+        };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // init
+        //
+        ///////////////////////////////////////////////////////////
+
+        // handlers mapped by file type
+
+        this.create_file_handlers = {
+            xlsx:   createXlsxFile,
+            ods:    createOdsFile,
+            xls:    createXlsFile,
+            txt:    createTxtFile,
+            csv:    createCsvFile
         };
     };
 
@@ -654,6 +860,18 @@ window.JSFile = window.JSFile || {};
 
 })(window.JSFile);
 
+"use strict";
+
+// dependency checks
+if (typeof _ === 'undefined') {
+    throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
+}
+if (typeof XLSX === 'undefined') {
+    throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
+}
+if (typeof XLS === 'undefined') {
+    throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
+}
 "use strict";
 
 window.JSFile = window.JSFile || {};
@@ -668,7 +886,6 @@ window.JSFile = window.JSFile || {};
     var FileReader = function() {
 
         var self = this;
-
         var message_prefix = "FileReader: ";
 
         this.MESSAGE_FILE_DATA_IS_REQUIRED  = message_prefix + "file_data param is required";
@@ -676,28 +893,12 @@ window.JSFile = window.JSFile || {};
         this.MESSAGE_UNSUPPORTED_FILE_TYPE  = message_prefix + "file type is not supported";
         this.MESSAGE_FILE_READ_ERROR        = message_prefix + "could not read file. Either file data is invalid, or file_type does not match file_data.";
 
-        var file_types = {
-            'text/plain': "txt",
-            'text/csv': "csv",
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': "xlsx",
-            'application/vnd.ms-excel': "xls",
-            'application/vnd.oasis.opendocument.spreadsheet': "ods"
-        };
 
-        /**
-         * getFileType
-         *
-         * @param type
-         * @returns {*}
-         */
-        this.getFileType = function(type) {
-
-            if (!_.contains(_.keys(file_types), type)) {
-                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_TYPE);
-            }
-
-            return file_types[type];
-        };
+        ///////////////////////////////////////////////////////////
+        //
+        // public methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * getWorksheetNames
@@ -747,7 +948,6 @@ window.JSFile = window.JSFile || {};
             // arg defaults
             group_by = !_.isUndefined(group_by) ? group_by.toLowerCase() : "row";
 
-
             file_type = file_type.toLowerCase();
 
             if (!_.includes(_.keys(this.file_to_array_handlers), file_type)) {
@@ -756,6 +956,13 @@ window.JSFile = window.JSFile || {};
 
             return this.file_to_array_handlers[file_type](file_data, worksheet_has_headings, group_by);
         };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // private methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * txtToArray
@@ -817,7 +1024,7 @@ window.JSFile = window.JSFile || {};
 
             try {
                 var workbook_data = XLSX.read(data, {type: 'binary'});
-               result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
+                result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
             } catch (error) {
                 throw new Error(this.MESSAGE_FILE_READ_ERROR);
             }
@@ -970,6 +1177,13 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // init
+        //
+        ///////////////////////////////////////////////////////////
 
         // handlers mapped by file type
 

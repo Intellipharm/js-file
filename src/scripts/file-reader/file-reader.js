@@ -10,5 +10,3 @@ if (typeof XLSX === 'undefined') {
 if (typeof XLS === 'undefined') {
     throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
 }
-
-window.JSFile = window.JSFile || {};

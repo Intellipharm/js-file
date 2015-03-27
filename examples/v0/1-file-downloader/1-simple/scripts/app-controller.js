@@ -11,6 +11,7 @@
         $scope.filename1 = "AngularJS UI Grid data";
         $scope.filename2 = "JQuery DataTables data";
         $scope.filename3 = "JQuery DataTables data (complex headers)";
+        $scope.file_type = 'xlsx';
 
         var types = {
             'ui-grid': function() { return uigrid_data; },
@@ -22,6 +23,7 @@
          * clickHandler
          *
          * @param type
+         * @param filename
          */
         this.clickHandler = function(type, filename) {
 
@@ -31,7 +33,7 @@
             var workbook = new window.JSFile.Workbook(data);
 
             // initiate download
-            window.JSFile.FileDownloader.downloadWorkbook(workbook, filename);
+            window.JSFile.FileDownloader.downloadWorkbook(workbook, filename, $scope.file_type);
         };
     };
 

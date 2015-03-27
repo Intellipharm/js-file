@@ -10,5 +10,9 @@ if (typeof XLSX === 'undefined') {
 if (typeof XLS === 'undefined') {
     throw new Error("Please include js-xls (https://github.com/SheetJS/js-xls)");
 }
-
-window.JSFile = window.JSFile || {};
+if (typeof Blob === 'undefined') {
+    throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
+}
+if (typeof saveAs === 'undefined') {
+    throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
+}

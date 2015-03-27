@@ -12,17 +12,29 @@ window.JSFile = window.JSFile || {};
     var FileDownloader = function() {
 
         var self = this;
+        var message_prefix = "FileDownloader: ";
 
-        this.MESSAGE_WORKBOOK_IS_REQUIRED = "workbook param is required for FileDownloader.downloadWorkbook";
-        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID = "workbook param my be an instance of JSFile.Workbook";
+        this.MESSAGE_WORKBOOK_IS_REQUIRED       = message_prefix + "workbook param is required for FileDownloader.downloadWorkbook";
+        this.MESSAGE_WORKBOOK_MODEL_IS_INVALID  = message_prefix + "workbook param must be an instance of JSFile.Workbook";
+        this.MESSAGE_FILE_NAME_IS_REQUIRED      = message_prefix + "file_name is required";
+        this.CURRENTLY_UNSUPPORTED_FILE_TYPE    = message_prefix + "this file type is currently not supported.";
+        this.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK = message_prefix + "browser does support the required feature and no fallback method was provided";
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // public methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * downloadWorkbook
          *
          * @param workbook
-         * @param file_name
+         * @param filename
+         * @param file_extension
          */
-        this.downloadWorkbook = function(workbook, file_name) {
+        this.downloadWorkbook = function(workbook, filename, file_extension) {
 
             // validate args
             if (_.isUndefined(workbook) || _.isNull(workbook)) {
@@ -31,28 +43,27 @@ window.JSFile = window.JSFile || {};
             if (!(workbook instanceof module.Workbook)) {
                 throw new Error(this.MESSAGE_WORKBOOK_MODEL_IS_INVALID);
             }
-
-            // arg defaults
-            if (_.isUndefined(file_name)) {
-                file_name = 'download.xlsx';
+            if (_.isUndefined(filename) || _.isNull(filename) || filename === "") {
+                throw new Error(this.MESSAGE_FILE_NAME_IS_REQUIRED);
             }
 
-            if (!_.endsWith(file_name, '.xlsx')) {
-                file_name += '.xlsx';
-            }
+            // transform file data (name & extension)
+            var file_data = module.FileUtil.transformFilenameAndExtension(filename, file_extension);
 
-            // initiate file download
-            // TODO: add config to specify output format
-            var workbook_output = XLSX.write(workbook, {bookType: 'xlsx', bookSST: false, type: 'binary'});
-            var array_buffer = convertStringToArrayBuffer(workbook_output);
+            // create file array buffer
+            var file_array_buffer = this.create_file_handlers[file_data['file_extension']](workbook, file_data['file_extension']);
 
-            downloadFile(file_name, array_buffer);
+            // get file mime_type
+            var file_mimetype = module.FileUtil.getFileMimeType(file_data['file_extension']);
+
+            // initiate download
+            initiateFileDownload(file_array_buffer, file_data['filename'], file_mimetype);
         };
 
 
         ///////////////////////////////////////////////////////////
         //
-        // helper methods
+        // private methods
         //
         ///////////////////////////////////////////////////////////
 
@@ -69,59 +80,119 @@ window.JSFile = window.JSFile || {};
                 view[i] = str.charCodeAt(i) & 0xFF;
             }
             return array_buffer;
-        }
+        };
 
         /**
-         * downloadFile (from Angular UI Data Grid)
-         * TODO: research this and clean up
-         * TODO: update to support Safari (try FileSaver.js)
+         * createXlsxFile
          *
-         * @param file_name
-         * @param array_buffer
-         * @returns {*}
+         * @param workbook
+         * @param file_extension
          */
-        var downloadFile = function (file_name, array_buffer) {
+        var createXlsxFile = function(workbook, file_extension) {
+            var workbook_output = XLSX.write(workbook, {bookType: file_extension, bookSST: false, type: 'binary'});
 
-            var D = document;
-            var a = D.createElement('a');
-            var strMimeType = 'application/octet-stream;charset=utf-8';
-            var rawFile;
+            console.log(XLSX);
 
-            // IE10+
-            if (navigator.msSaveBlob) {
-                return navigator.msSaveBlob(new Blob(["\ufeff", array_buffer], {
-                    type: strMimeType
-                }), file_name);
+            return convertStringToArrayBuffer(workbook_output);
+        };
+
+        /**
+         * createOdsFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createOdsFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createXlsFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createXlsFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createTxtFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createTxtFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * createCsvFile
+         *
+         * @param workbook
+         * @param file_extension
+         */
+        var createCsvFile = function(workbook, file_extension) {
+            throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
+        };
+
+        /**
+         * initiateFileDownload
+         *
+         * @param array_buffer
+         * @param filename
+         * @param file_mimetype
+         */
+        var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
+
+            // Blob is natively supported by all but ie8 & ie9
+            // Blob.js creates a shim for ie8 & ie9
+            // TODO: add seperate handling for text & csv
+
+            // if browser is IE10+
+            if (window.navigator.msSaveBlob) {
+
+                // create ie10 Blob
+                var blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
+
+                // initiate ie10 download
+                return window.navigator.msSaveBlob(blob, filename);
             }
 
-            //html5 A[download]
-            if ('download' in a) {
+            // create Blob
+            var blob = new Blob([file_array_buffer], {type: file_mimetype});
 
-                var blob = new Blob([array_buffer], {
-                    type: strMimeType
-                });
-                rawFile = URL.createObjectURL(blob);
-                a.setAttribute('download', file_name);
-            } else {
-                rawFile = 'data:' + strMimeType + ',' + encodeURIComponent(array_buffer);
-                a.setAttribute('target', '_blank');
-            }
+            // adownload is not supported by browser (ie8, ie9, Safari)
+            if (!Modernizr.adownload) {
 
-            a.href = rawFile;
-            a.setAttribute('style', 'display:none;');
-            D.body.appendChild(a);
-            setTimeout(function() {
-                if (a.click) {
-                    a.click();
-                    // Workaround for Safari 5
-                } else if (document.createEvent) {
-                    var eventObj = document.createEvent('MouseEvents');
-                    eventObj.initEvent('click', true, true);
-                    a.dispatchEvent(eventObj);
+                // no initiateFileDownloadFallback method is defined
+                if (_.isUndefined(self.initiateFileDownloadFallback)) {
+                    throw new Error(self.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK);
                 }
-                D.body.removeChild(a);
 
-            }, 100);
+                // call initiate download fallback
+                return self.initiateFileDownloadFallback(blob, filename);
+            }
+
+            // initiate download
+            return window.saveAs(blob, filename);
+        };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // init
+        //
+        ///////////////////////////////////////////////////////////
+
+        // handlers mapped by file type
+
+        this.create_file_handlers = {
+            xlsx:   createXlsxFile,
+            ods:    createOdsFile,
+            xls:    createXlsFile,
+            txt:    createTxtFile,
+            csv:    createCsvFile
         };
     };
 

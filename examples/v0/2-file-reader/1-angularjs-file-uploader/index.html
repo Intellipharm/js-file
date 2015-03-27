@@ -48,12 +48,12 @@
                 <td>{{upload_file.name}}</td>
             </tr>
             <tr>
-                <td><strong>type</strong></td>
+                <td><strong>mimetype</strong></td>
                 <td>{{upload_file.type}}</td>
             </tr>
             <tr>
-                <td><strong>calculated type</strong></td>
-                <td>{{calculated_type}}</td>
+                <td><strong>extension</strong></td>
+                <td>{{extension}}</td>
             </tr>
         </table>
 
@@ -115,16 +115,20 @@
 <script src="../../bower_components/js-xls/dist/xls.min.js"></script>
 <script src="../../bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
 <script src="../../bower_components/js-xlsx/dist/ods.js"></script>
+<script src="../../bower_components/blob/Blob.js"></script>
+<script src="../../bower_components/file-saver/FileSaver.min.js"></script>
 
 <!-- JS File -->
+<script src="../../../../dist/js-file.min.js"></script><!--
 <script src="../../../../src/scripts/modernizr.js"></script>
 <script src="../../../../src/scripts/js-file.js"></script>
+<script src="../../../../src/scripts/js-file-settings.js"></script>
 <script src="../../../../src/scripts/utils/file-util.js"></script>
 <script src="../../../../src/scripts/models/workbook-model.js"></script>
 <script src="../../../../src/scripts/models/worksheet-model.js"></script>
 <script src="../../../../src/scripts/models/worksheet-cell-model.js"></script>
-<script src="../../../../src/scripts/file-downloader/file-downloader-service.js"></script>
-<script src="../../../../src/scripts/file-reader/file-reader-service.js"></script>
+<script src="../../../../src/scripts/file-reader/file-reader.js"></script>
+<script src="../../../../src/scripts/file-reader/file-reader-service.js"></script>-->
 
 <!-- AngularJS InputFileReader -->
 <script src="scripts/angularjs-file-upload/angularjs-file-upload.js"></script>

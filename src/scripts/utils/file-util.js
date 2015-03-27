@@ -12,6 +12,13 @@ window.JSFile = window.JSFile || {};
     var FileUtil = function() {
 
         var self = this;
+        var message_prefix = "FileUtil: ";
+
+        this.MESSAGE_UNSUPPORTED_FILE_MIMETYPE      = message_prefix + "file mimetype is not supported";
+        this.MESSAGE_UNSUPPORTED_FILE_EXTENSION     = message_prefix + "file extension is not supported";
+        this.MESSAGE_FILE_NAME_IS_REQUIRED          = message_prefix + "file_name is required";
+        this.MESSAGE_FILE_EXTENSION_MISMATCH        = message_prefix + "the extension contained in the file_name argument does not match the file_extension argument";
+        this.MESSAGE_FILE_EXTENSION_IS_REQUIRED     = message_prefix + "an file extension must be provided, either as part of the filename or as the file_extension argument";
 
         // data alternatives (these will be used as replacements for missing data)
 
@@ -76,6 +83,55 @@ window.JSFile = window.JSFile || {};
             });
 
             return data;
+        };
+
+        /**
+         * transformFilenameAndExtension
+         *
+         * @param filename
+         * @param file_extension
+         * @returns {*}
+         */
+        this.transformFilenameAndExtension = function(filename, file_extension) {
+
+            if (_.isUndefined(filename) || _.isNull(filename) || filename === "") {
+                throw new Error(this.MESSAGE_FILE_NAME_IS_REQUIRED);
+            }
+
+            if (!_.isUndefined(file_extension) && !_.includes(_.keys(module.supported_file_types), file_extension)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+            }
+
+            // search filename for extension
+            var file_name_extension = /[^.]+$/.exec(filename);
+
+            // if possible filename extension matches supported extensions, then extract
+            if (_.includes(_.keys(module.supported_file_types), file_name_extension[0])) {
+
+                // extension found in file_name does not match file_extension
+                if (!_.isUndefined(file_extension) && file_name_extension[0] !== file_extension) {
+                    throw new Error(this.MESSAGE_FILE_EXTENSION_MISMATCH);
+                }
+
+                // remove extension from filename
+                filename  = /(.*)\.[^.]+$/.exec(filename)[1];
+
+                // set file_extension
+                file_extension = file_name_extension[0];
+            }
+
+            // if filename extension does not match supported extensions and no file_extension was provided
+            else if (_.isUndefined(file_extension)) {
+                throw new Error(this.MESSAGE_FILE_EXTENSION_IS_REQUIRED);
+            }
+
+            // add extension to filename
+            filename += '.' + file_extension;
+
+            return {
+                filename: filename,
+                file_extension: file_extension
+            };
         };
 
         /**
@@ -235,6 +291,45 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
+
+        /**
+         * getFileExtension
+         *
+         * @param mimetype
+         * @returns {*}
+         */
+        this.getFileExtension = function(file_mimetype) {
+
+            if (!_.includes(_.values(module.supported_file_types), file_mimetype)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_MIMETYPE);
+            }
+
+            return _.findKey(module.supported_file_types, function(n) {
+                return n === file_mimetype;
+            });
+        };
+
+        /**
+         * getFileMimeType
+         *
+         * @param file_extension
+         * @returns {*}
+         */
+        this.getFileMimeType = function(file_extension) {
+
+            if (!_.includes(_.keys(module.supported_file_types), file_extension)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+            }
+
+            return module.supported_file_types[file_extension];
+        };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // private methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * transformSheet

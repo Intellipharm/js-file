@@ -12,7 +12,6 @@ module.exports = function(config) {
 		// available frameworks: https://npmjs.org/browse/keyword/karma-adapter
 		frameworks: ['jasmine'],
 
-
 		// list of files / patterns to load in the browser
 		files: [
 
@@ -21,20 +20,29 @@ module.exports = function(config) {
 			'bower_components/js-xls/dist/xls.min.js',
 			'bower_components/js-xlsx/dist/xlsx.full.min.js',
 			'bower_components/js-xlsx/dist/ods.js',
+			'bower_components/file-saver/FileSaver.min.js',
+			'bower_components/blob/Blob.js',
 
             // test data
             'tests-data/*.js',
 
             // src
+			'src/scripts/modernizr.js',
+			'src/scripts/js-file.js',
+			'src/scripts/js-file-settings.js',
 			'src/scripts/utils/file-util.js',
 			'src/scripts/models/workbook-model.js',
 			'src/scripts/models/worksheet-model.js',
 			'src/scripts/models/worksheet-cell-model.js',
+			'src/scripts/file-downloader/file-downloader.js',
 			'src/scripts/file-downloader/file-downloader-service.js',
+			'src/scripts/file-reader/file-reader.js',
 			'src/scripts/file-reader/file-reader-service.js',
 
             // tests
-			'tests/**/*.js'
+			//'tests/**/*.js'
+			'tests/utils/file-util.test.js',
+            'tests/file-downloader/file-downloader-service.test.js'
 		],
 
 		// list of files to exclude

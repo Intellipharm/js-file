@@ -12,7 +12,6 @@ window.JSFile = window.JSFile || {};
     var FileReader = function() {
 
         var self = this;
-
         var message_prefix = "FileReader: ";
 
         this.MESSAGE_FILE_DATA_IS_REQUIRED  = message_prefix + "file_data param is required";
@@ -20,28 +19,12 @@ window.JSFile = window.JSFile || {};
         this.MESSAGE_UNSUPPORTED_FILE_TYPE  = message_prefix + "file type is not supported";
         this.MESSAGE_FILE_READ_ERROR        = message_prefix + "could not read file. Either file data is invalid, or file_type does not match file_data.";
 
-        var file_types = {
-            'text/plain': "txt",
-            'text/csv': "csv",
-            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': "xlsx",
-            'application/vnd.ms-excel': "xls",
-            'application/vnd.oasis.opendocument.spreadsheet': "ods"
-        };
 
-        /**
-         * getFileType
-         *
-         * @param type
-         * @returns {*}
-         */
-        this.getFileType = function(type) {
-
-            if (!_.contains(_.keys(file_types), type)) {
-                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_TYPE);
-            }
-
-            return file_types[type];
-        };
+        ///////////////////////////////////////////////////////////
+        //
+        // public methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * getWorksheetNames
@@ -91,7 +74,6 @@ window.JSFile = window.JSFile || {};
             // arg defaults
             group_by = !_.isUndefined(group_by) ? group_by.toLowerCase() : "row";
 
-
             file_type = file_type.toLowerCase();
 
             if (!_.includes(_.keys(this.file_to_array_handlers), file_type)) {
@@ -100,6 +82,13 @@ window.JSFile = window.JSFile || {};
 
             return this.file_to_array_handlers[file_type](file_data, worksheet_has_headings, group_by);
         };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // private methods
+        //
+        ///////////////////////////////////////////////////////////
 
         /**
          * txtToArray
@@ -161,7 +150,7 @@ window.JSFile = window.JSFile || {};
 
             try {
                 var workbook_data = XLSX.read(data, {type: 'binary'});
-               result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
+                result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
             } catch (error) {
                 throw new Error(this.MESSAGE_FILE_READ_ERROR);
             }
@@ -314,6 +303,13 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
+
+
+        ///////////////////////////////////////////////////////////
+        //
+        // init
+        //
+        ///////////////////////////////////////////////////////////
 
         // handlers mapped by file type
 

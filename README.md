@@ -70,35 +70,29 @@ Model used to create workbook.
 
 ## JSFile.FileDownloader API
 
-### public constants
-
-MESSAGE_WORKBOOK_IS_REQUIRED
-MESSAGE_WORKBOOK_MODEL_IS_INVALID
-
-
-### public methods
-
-#### downloadWorkbook(workbook, filename)
+#### downloadWorkbook(workbook, filename, file_extension)
 
 Initiates a download when passed an instance of the JSFile.Workbook model.
 
-| param      | type             | description                                                    |
-| ---------- | ---------------- | -------------------------------------------------------------- |
-| workbook   | JSFile.Workbook  | Workbook created using JSFile.FileCreator.createWorkbook       |
-| filename   | string           | Name of the file                                               |
+| param            | type             | description                                                    |
+| ---------------- | ---------------- | -------------------------------------------------------------- |
+| workbook         | JSFile.Workbook  | Workbook created using JSFile.FileCreator.createWorkbook       |
+| filename         | string           | Name of the file (May include extension)                       |
+| file_extension   | string           | Extension of the file (Optional)                               |
+
+
+#### initiateFileDownloadFallback(file_array_buffer, filename, file_mimetype)
+
+Externally provided fallback method when Modernizr.adownload fails
+
+| param             | type     | description                   |
+| ----------------- | -------- | ----------------------------- |
+| file_array_buffer | string   | array buffer of file          |
+| filename          | string   | filename incuding extension   |
+| file_mimetype     | string   | file mimetype                 |
 
 
 ## JSFile.FileReader API
-
-### public constants
-
-MESSAGE_FILE_DATA_IS_REQUIRED
-MESSAGE_FILE_TYPE_IS_REQUIRED
-MESSAGE_UNSUPPORTED_FILE_TYPE
-MESSAGE_FILE_READ_ERROR
-
-
-### public methods
 
 #### getFileType(type)
 

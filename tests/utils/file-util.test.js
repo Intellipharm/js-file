@@ -336,4 +336,136 @@ describe("FileUtil", function() {
             expect(result).toEqual("B");
         });
     });
+
+    //--------------------------------------------
+    // transformFilenameAndExtension
+    //--------------------------------------------
+
+    describe("transformFilenameAndExtension", function() {
+
+        it("should return an object", function () {
+            var result = Util.transformFilenameAndExtension("asasasas", 'xlsx');
+            expect(_.isObject(result)).toBeTruthy();
+        });
+        it("result should have a filename property", function () {
+            var result = Util.transformFilenameAndExtension("asasasas", 'xlsx');
+            expect(_.has(result, 'filename')).toBeTruthy();
+        });
+        it("result should have a file_extension property", function () {
+            var result = Util.transformFilenameAndExtension("asasasas", 'xlsx');
+            expect(_.has(result, 'file_extension')).toBeTruthy();
+        });
+
+        it("should throw an error if file_name is not provided", function () {
+            expect(function () {
+                var result = Util.transformFilenameAndExtension();
+            }).toThrowError(Util.MESSAGE_FILE_NAME_IS_REQUIRED);
+        });
+
+        it("should throw an error if file_extension is not supported", function () {
+            expect(function () {
+                var result = Util.transformFilenameAndExtension('asdasds', 'aaaa');
+            }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+        });
+
+        it("should throw an error if file_name contains a valid extension that does not match file_extension", function () {
+            expect(function () {
+                var result = Util.transformFilenameAndExtension('asdasds.xls', 'xlsx');
+            }).toThrowError(Util.MESSAGE_FILE_EXTENSION_MISMATCH);
+        });
+
+        it("should throw an error if file_name does not contains a valid and file_extension is not provided", function () {
+            expect(function () {
+                var result = Util.transformFilenameAndExtension('asdasds.asdsa');
+            }).toThrowError(Util.MESSAGE_FILE_EXTENSION_IS_REQUIRED);
+        });
+
+        it("should add file_extension to filename is not set", function () {
+            var result = Util.transformFilenameAndExtension('aaa', 'xls');
+            expect(result['filename']).toEqual('aaa.xls');
+        });
+
+        it("should not add file_extension if already set in filename", function () {
+            var result = Util.transformFilenameAndExtension('aaa.xls', 'xls');
+            expect(result['filename']).toEqual('aaa.xls');
+        });
+
+        it("should not add file_extension if already set in filename, if file_extension if not provided", function () {
+            var result = Util.transformFilenameAndExtension('aaa.xls');
+            expect(result['filename']).toEqual('aaa.xls');
+        });
+
+        it("should return extracted extension", function () {
+            var result = Util.transformFilenameAndExtension('aaa.xls');
+            expect(result['file_extension']).toEqual('xls');
+        });
+    });
+
+    //--------------------------------------------
+    // getFileExtension
+    //--------------------------------------------
+
+    describe("getFileExtension", function() {
+
+        it("should throw an error if mimetype is unsupported", function () {
+            expect(function () {
+                var result = Util.getFileExtension('asdasds');
+            }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_MIMETYPE);
+        });
+
+        it("should return txt", function () {
+            var result = Util.getFileExtension('text/plain');
+            expect(result).toEqual('txt');
+        });
+        it("should return csv", function () {
+            var result = Util.getFileExtension('text/csv');
+            expect(result).toEqual('csv');
+        });
+        it("should return xlsx", function () {
+            var result = Util.getFileExtension('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            expect(result).toEqual('xlsx');
+        });
+        it("should return xls", function () {
+            var result = Util.getFileExtension('application/vnd.ms-excel');
+            expect(result).toEqual('xls');
+        });
+        it("should return ods", function () {
+            var result = Util.getFileExtension('application/vnd.oasis.opendocument.spreadsheet');
+            expect(result).toEqual('ods');
+        });
+    });
+
+    //--------------------------------------------
+    // getFileMimeType
+    //--------------------------------------------
+
+    describe("getFileMimeType", function() {
+
+        it("should throw an error if extension is unsupported", function () {
+            expect(function () {
+                var result = Util.getFileMimeType('asdasds');
+            }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
+        });
+
+        it("should return text/plain", function () {
+            var result = Util.getFileMimeType('txt');
+            expect(result).toEqual('text/plain');
+        });
+        it("should return text/csv", function () {
+            var result = Util.getFileMimeType('csv');
+            expect(result).toEqual('text/csv');
+        });
+        it("should return application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", function () {
+            var result = Util.getFileMimeType('xlsx');
+            expect(result).toEqual('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        });
+        it("should return application/vnd.ms-excel", function () {
+            var result = Util.getFileMimeType('xls');
+            expect(result).toEqual('application/vnd.ms-excel');
+        });
+        it("should return application/vnd.oasis.opendocument.spreadsheet", function () {
+            var result = Util.getFileMimeType('ods');
+            expect(result).toEqual('application/vnd.oasis.opendocument.spreadsheet');
+        });
+    });
 });

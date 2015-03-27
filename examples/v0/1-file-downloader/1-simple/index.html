@@ -17,6 +17,15 @@
 <div class="row">
 	<div class="col-sm-6 col-sm-offset-3 col-lg-4 col-lg-offset-4 example well">
 
+        <form>
+            <fieldset>
+                <label>File Type: </label>
+                <select class="form-control" ng-model="file_type">
+                    <option value="xlsx">XLSX</option>
+                </select>
+            </fieldset>
+        </form>
+
         <h3>AngularJS UI Grid data</h3>
 
         <form>
@@ -54,22 +63,24 @@
 	</div>
 </div><!--/.row-->
 
-
 <!-- dependencies -->
 <script src="../../bower_components/modernizr/modernizr.js"></script>
 <script src="../../bower_components/lodash/lodash.min.js"></script>
 <script src="../../bower_components/angular/angular.min.js"></script>
 <script src="../../bower_components/js-xls/dist/xls.min.js"></script>
 <script src="../../bower_components/js-xlsx/dist/xlsx.full.min.js"></script>
+<script src="../../bower_components/file-saver/FileSaver.min.js"></script>
 
 <!-- JS File -->
-<script src="../../../../dist/js-file.min.js"></script>
-<!--
+<script src="../../../../dist/js-file.min.js"></script><!--
+<script src="../../../../src/scripts/modernizr.js"></script>
 <script src="../../../../src/scripts/js-file.js"></script>
+<script src="../../../../src/scripts/js-file-settings.js"></script>
 <script src="../../../../src/scripts/utils/file-util.js"></script>
 <script src="../../../../src/scripts/models/workbook-model.js"></script>
 <script src="../../../../src/scripts/models/worksheet-model.js"></script>
 <script src="../../../../src/scripts/models/worksheet-cell-model.js"></script>
+<script src="../../../../src/scripts/file-downloader/file-downloader.js"></script>
 <script src="../../../../src/scripts/file-downloader/file-downloader-service.js"></script>-->
 
 <!-- example app -->
