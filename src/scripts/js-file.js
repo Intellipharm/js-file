@@ -1,3 +1,6 @@
-"use strict";
+(function() {
+    'use strict';
 
-window.JSFile = window.JSFile || {};
+    window.JSFile = window.JSFile || {};
+
+})();

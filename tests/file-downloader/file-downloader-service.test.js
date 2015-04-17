@@ -35,24 +35,24 @@ describe("FileDownloader", function() {
 
         it("should throw an error if no workbook is passed", function () {
             expect(function () {
-                var result = Service.downloadWorkbook();
+                Service.downloadWorkbook();
             }).toThrowError(Service.MESSAGE_WORKBOOK_IS_REQUIRED);
         });
 
         it("should throw an error if workbook is not an instance of JSFile.Workbook", function () {
             expect(function () {
-                var result = Service.downloadWorkbook({}, '', 'xlsx');
+                Service.downloadWorkbook({}, '', 'xlsx');
             }).toThrowError(Service.MESSAGE_WORKBOOK_MODEL_IS_INVALID);
         });
 
         it("should throw an error if file_name is not provided", function () {
             expect(function () {
-                var result = Service.downloadWorkbook(workbook);
+                Service.downloadWorkbook(workbook);
             }).toThrowError(Service.MESSAGE_FILE_NAME_IS_REQUIRED);
         });
 
         it("should call FileUtil.transformFilenameAndExtension with file_name & file_extension", function () {
-            var result = Service.downloadWorkbook(workbook, 'a', 'xls');
+            Service.downloadWorkbook(workbook, 'a', 'xls');
             expect(window.JSFile.FileUtil.transformFilenameAndExtension).toHaveBeenCalledWith('a', 'xls');
         });
     });
@@ -83,7 +83,7 @@ describe("FileDownloader", function() {
 
             spyOn(Service.create_file_handlers, 'xlsx').and.returnValue([]);
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.create_file_handlers.xlsx).toHaveBeenCalledWith(workbook, 'xlsx');
         });
 
@@ -94,7 +94,7 @@ describe("FileDownloader", function() {
 
             spyOn(Service.create_file_handlers, 'ods').and.returnValue([]);
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.create_file_handlers.ods).toHaveBeenCalledWith(workbook, 'ods');
         });
 
@@ -105,7 +105,7 @@ describe("FileDownloader", function() {
 
             spyOn(Service.create_file_handlers, 'xls').and.returnValue([]);
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.create_file_handlers.xls).toHaveBeenCalledWith(workbook, 'xls');
         });
 
@@ -116,7 +116,7 @@ describe("FileDownloader", function() {
 
             spyOn(Service.create_file_handlers, 'txt').and.returnValue([]);
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.create_file_handlers.txt).toHaveBeenCalledWith(workbook, 'txt');
         });
 
@@ -127,7 +127,7 @@ describe("FileDownloader", function() {
 
             spyOn(Service.create_file_handlers, 'csv').and.returnValue([]);
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.create_file_handlers.csv).toHaveBeenCalledWith(workbook, 'csv');
         });
     });
@@ -157,7 +157,7 @@ describe("FileDownloader", function() {
 
         it("should call JSFile.FileUtil.getFileMimeType with file_extension", function () {
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(window.JSFile.FileUtil.getFileMimeType).toHaveBeenCalledWith('xlsx');
         });
 
@@ -167,7 +167,7 @@ describe("FileDownloader", function() {
             window.navigator.msSaveBlob = function() {};
             spyOn(window.navigator, 'msSaveBlob');
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(window.navigator.msSaveBlob).toHaveBeenCalled();
             expect(window.navigator.msSaveBlob.calls.mostRecent().args[0] instanceof window.Blob).toBeTruthy();
             expect(window.navigator.msSaveBlob.calls.mostRecent().args[1]).toEqual('aaa.xlsx');
@@ -178,7 +178,7 @@ describe("FileDownloader", function() {
                 // mocks
                 Modernizr.adownload = false;
 
-                var result = Service.downloadWorkbook(workbook, 'a', 'b');
+                Service.downloadWorkbook(workbook, 'a', 'b');
             }).toThrowError(Service.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK);
         });
 
@@ -189,7 +189,7 @@ describe("FileDownloader", function() {
             Service.initiateFileDownloadFallback = function() {};
             spyOn(Service, 'initiateFileDownloadFallback');
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(Service.initiateFileDownloadFallback).toHaveBeenCalled();
             expect(Service.initiateFileDownloadFallback.calls.mostRecent().args[0] instanceof window.Blob).toBeTruthy();
             expect(Service.initiateFileDownloadFallback.calls.mostRecent().args[1]).toEqual('aaa.xlsx');
@@ -200,7 +200,7 @@ describe("FileDownloader", function() {
             // mocks
             Modernizr.adownload = true;
 
-            var result = Service.downloadWorkbook(workbook, 'a', 'b');
+            Service.downloadWorkbook(workbook, 'a', 'b');
             expect(window.saveAs).toHaveBeenCalled();
             expect(window.saveAs.calls.mostRecent().args[0] instanceof window.Blob).toBeTruthy();
             expect(window.saveAs.calls.mostRecent().args[1]).toEqual('aaa.xlsx');

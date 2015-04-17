@@ -1,8 +1,7 @@
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * Worksheet Model
@@ -28,7 +27,7 @@ window.JSFile = window.JSFile || {};
 
         // count letters
         var letter_count = [];
-        _.forEach(headers, function (item, key, obj) {
+        _.forEach(headers, function (item) {
             letter_count.push(item.length);
         });
 
@@ -42,7 +41,7 @@ window.JSFile = window.JSFile || {};
         headers = module.FileUtil.convertWorksheetHeadersArrayToObject(headers);
 
         // set worksheet header data
-        _.forEach(headers, function (value, key, obj) {
+        _.forEach(headers, function (value, key) {
 
             // TODO: add column type support (new module.WorksheetCell({type: "s"})
             self[key] = new module.WorksheetCell({type: 's', value: value});
@@ -81,7 +80,7 @@ window.JSFile = window.JSFile || {};
             s: {c: 0, r: 0}, // start
             e: {c: (highest_letter - 1), r: (cell_number - 2)} // end
         });
-        
+
     };
 
 })(window.JSFile);

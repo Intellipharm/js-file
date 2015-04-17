@@ -1,8 +1,7 @@
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileReader Class
@@ -10,15 +9,12 @@ window.JSFile = window.JSFile || {};
      * @constructor
      */
     var FileReader = function() {
-
-        var self = this;
         var message_prefix = "FileReader: ";
 
         this.MESSAGE_FILE_DATA_IS_REQUIRED  = message_prefix + "file_data param is required";
         this.MESSAGE_FILE_TYPE_IS_REQUIRED  = message_prefix + "file_type param is required";
         this.MESSAGE_UNSUPPORTED_FILE_TYPE  = message_prefix + "file type is not supported";
         this.MESSAGE_FILE_READ_ERROR        = message_prefix + "could not read file. Either file data is invalid, or file_type does not match file_data.";
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -83,7 +79,6 @@ window.JSFile = window.JSFile || {};
             return this.file_to_array_handlers[file_type](file_data, worksheet_has_headings, group_by);
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // private methods
@@ -98,7 +93,7 @@ window.JSFile = window.JSFile || {};
          * @param group_by
          * @returns {*|Array}
          */
-        var txtToArray = function(text, worksheet_has_headings, group_by) {
+        var txtToArray = function(text, worksheet_has_headings) {
 
             var data = text.split(/\n/);
             _.forEach(data, function (item, index, data) {
@@ -116,7 +111,7 @@ window.JSFile = window.JSFile || {};
             if (has_heading_row) {
                 var result = [];
                 var headings = data[0];
-                _.forEach(data, function (row, row_index) {
+                _.forEach(data, function (row) {
                     var _row = {};
                     _.forEach(row, function (column, column_index) {
                         _row[headings[column_index]] = column;
@@ -177,7 +172,7 @@ window.JSFile = window.JSFile || {};
 
             try {
                 var workbook_data = window.XLS.read(data, {type: 'binary'});
-               result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
+                result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
             } catch (error) {
                 throw new Error(this.MESSAGE_FILE_READ_ERROR);
             }
@@ -193,7 +188,7 @@ window.JSFile = window.JSFile || {};
          * @param group_by
          * @returns {Array}
          */
-        var workbookDataToArray = function(data, worksheet_has_headings, group_by) {
+        var workbookDataToArray = function(data, worksheet_has_headings) {
 
             var result = [];
             var index = 0;
@@ -309,7 +304,6 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
-
 
         ///////////////////////////////////////////////////////////
         //

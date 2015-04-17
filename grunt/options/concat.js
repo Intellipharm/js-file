@@ -4,7 +4,7 @@ module.exports = {
         sourceMap: false
     },
     'dist-js': {
-    	dest: '<%= config.dist %>/js-file.js',
+        dest: '<%= config.dist %>/js-file.js',
         src: [
             '<%= config.src %>/scripts/modernizr.js',
             '<%= config.src %>/scripts/js-file.js',

@@ -1,29 +1,32 @@
 ;window.Modernizr=function(a,b,c){function t(a){i.cssText=a}function u(a,b){return t(prefixes.join(a+";")+(b||""))}function v(a,b){return typeof a===b}function w(a,b){return!!~(""+a).indexOf(b)}function x(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:v(f,"function")?f.bind(d||b):f}return!1}var d="2.8.3",e={},f=b.documentElement,g="modernizr",h=b.createElement(g),i=h.style,j,k={}.toString,l={},m={},n={},o=[],p=o.slice,q,r={}.hasOwnProperty,s;!v(r,"undefined")&&!v(r.call,"undefined")?s=function(a,b){return r.call(a,b)}:s=function(a,b){return b in a&&v(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=p.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(p.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(p.call(arguments)))};return e});for(var y in l)s(l,y)&&(q=y.toLowerCase(),e[q]=l[y](),o.push((e[q]?"":"no-")+q));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)s(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof enableClasses!="undefined"&&enableClasses&&(f.className+=" "+(b?"":"no-")+a),e[a]=b}return e},t(""),h=j=null,e._version=d,e}(this,this.document),Modernizr.addTest("adownload","download"in document.createElement("a")),Modernizr.addTest("filereader",function(){return!!(window.File&&window.FileList&&window.FileReader)});
-"use strict";
+(function() {
+    'use strict';
 
-window.JSFile = window.JSFile || {};
-"use strict";
+    window.JSFile = window.JSFile || {};
+
+})();
 
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     // supported file types
 
     module.supported_file_types = {
-        'txt': 'text/plain',
-        'csv': 'text/csv',
-        'xlsx': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-        'xls': 'application/vnd.ms-excel',
-        'ods': 'application/vnd.oasis.opendocument.spreadsheet'
+        txt: 'text/plain',
+        csv: 'text/csv',
+        xlsx: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+        xls: 'application/vnd.ms-excel',
+        ods: 'application/vnd.oasis.opendocument.spreadsheet'
     };
 
 })(window.JSFile);
-"use strict";
 
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileUtil Class
@@ -60,7 +63,6 @@ window.JSFile = window.JSFile || {};
             }
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // public methods
@@ -80,7 +82,7 @@ window.JSFile = window.JSFile || {};
             }
 
             // loop sheets
-            _.forEach(data, function (item, index, obj) {
+            _.forEach(data, function (item, index) {
 
                 // transform sheet
                 data[index] = transformSheet(item, index);
@@ -229,7 +231,7 @@ window.JSFile = window.JSFile || {};
                                 headers[next_row] = [];
 
                                 // create next row columns
-                                for (var i=0; i<column_index; i++) {
+                                for (var i = 0; i < column_index; i++) {
                                     headers[next_row].push({});
                                 }
                             }
@@ -270,7 +272,7 @@ window.JSFile = window.JSFile || {};
 
                 var letter = "A";
 
-                _.forEach(row, function(column, column_index) {
+                _.forEach(row, function(column) {
 
                     // add value (if exists)
                     if (_.has(column, 'value')) {
@@ -345,7 +347,6 @@ window.JSFile = window.JSFile || {};
             return module.supported_file_types[file_extension];
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // private methods
@@ -377,7 +378,7 @@ window.JSFile = window.JSFile || {};
             }
             // name
             if (!_.has(data, 'name') || _.isUndefined(data.name)) {
-                data.name = findAlternativeData(data, keys, data_alternatives.sheet.name, "sheet" + (index+1));
+                data.name = findAlternativeData(data, keys, data_alternatives.sheet.name, "sheet" + (index + 1));
             }
 
             return {
@@ -389,20 +390,6 @@ window.JSFile = window.JSFile || {};
         };
 
         /**
-         * transformColumn
-         *
-         * @param column
-         * @param header
-         * @returns {{type: *}}
-         */
-        var transformColumn = function(column, header) {
-
-            return {
-                type: _.has(column, 'type') ? column.type : (_.has(header, 'type') ? header.type : 'string')
-            }
-        };
-
-        /**
          * transformHeader
          *
          * @param data
@@ -410,17 +397,17 @@ window.JSFile = window.JSFile || {};
         var transformHeader = function(data) {
 
             var _data = {};
-            var keys= [];
+            var keys = [];
 
             // loop fields
 
-            _.forEach(data, function (item, key, obj) {
+            _.forEach(data, function (item, key) {
 
                 // convert item keys & values to snake case
                 if (!_.isObject(item)) {
-                    var key     = _.snakeCase(key);
-                    _data[key]  = item;
-                    keys.push(key);
+                    var k     = _.snakeCase(key);
+                    _data[k]  = item;
+                    keys.push(k);
                 }
             });
 
@@ -466,18 +453,18 @@ window.JSFile = window.JSFile || {};
             });
 
             return result;
-        }
+        };
     };
 
     // create singleton
     module.FileUtil = new FileUtil();
 
 })(window.JSFile);
-"use strict";
 
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * Workbook Model
@@ -511,11 +498,10 @@ window.JSFile = window.JSFile || {};
 
 })(window.JSFile);
 
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * Worksheet Model
@@ -541,7 +527,7 @@ window.JSFile = window.JSFile || {};
 
         // count letters
         var letter_count = [];
-        _.forEach(headers, function (item, key, obj) {
+        _.forEach(headers, function (item) {
             letter_count.push(item.length);
         });
 
@@ -555,7 +541,7 @@ window.JSFile = window.JSFile || {};
         headers = module.FileUtil.convertWorksheetHeadersArrayToObject(headers);
 
         // set worksheet header data
-        _.forEach(headers, function (value, key, obj) {
+        _.forEach(headers, function (value, key) {
 
             // TODO: add column type support (new module.WorksheetCell({type: "s"})
             self[key] = new module.WorksheetCell({type: 's', value: value});
@@ -594,16 +580,15 @@ window.JSFile = window.JSFile || {};
             s: {c: 0, r: 0}, // start
             e: {c: (highest_letter - 1), r: (cell_number - 2)} // end
         });
-        
+
     };
 
 })(window.JSFile);
 
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * WorksheetCell Model
@@ -629,26 +614,28 @@ window.JSFile = window.JSFile || {};
 
 })(window.JSFile);
 
-"use strict";
+(function() {
+    'use strict';
 
-// dependency checks
-if (typeof window._ === 'undefined') {
-    throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
-}
-if (typeof window.XLSX === 'undefined') {
-    throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
-}
-if (typeof window.Blob === 'undefined') {
-    throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
-}
-if (typeof window.saveAs === 'undefined') {
-    throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
-}
-"use strict";
+    // dependency checks
+    if (typeof window._ === 'undefined') {
+        throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
+    }
+    if (typeof window.XLSX === 'undefined') {
+        throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
+    }
+    if (typeof window.Blob === 'undefined') {
+        throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
+    }
+    if (typeof window.saveAs === 'undefined') {
+        throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
+    }
+})();
 
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileDownloader Class
@@ -665,7 +652,6 @@ window.JSFile = window.JSFile || {};
         this.MESSAGE_FILE_NAME_IS_REQUIRED      = message_prefix + "file_name is required";
         this.CURRENTLY_UNSUPPORTED_FILE_TYPE    = message_prefix + "this file type is currently not supported.";
         this.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK = message_prefix + "browser does support the required feature and no fallback method was provided";
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -697,15 +683,14 @@ window.JSFile = window.JSFile || {};
             var file_data = module.FileUtil.transformFilenameAndExtension(filename, file_extension);
 
             // create file array buffer
-            var file_array_buffer = this.create_file_handlers[file_data['file_extension']](workbook, file_data['file_extension']);
+            var file_array_buffer = this.create_file_handlers[file_data.file_extension](workbook, file_data.file_extension);
 
             // get file mime_type
-            var file_mimetype = module.FileUtil.getFileMimeType(file_data['file_extension']);
+            var file_mimetype = module.FileUtil.getFileMimeType(file_data.file_extension);
 
             // initiate download
-            initiateFileDownload(file_array_buffer, file_data['filename'], file_mimetype);
+            initiateFileDownload(file_array_buffer, file_data.filename, file_mimetype);
         };
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -722,7 +707,7 @@ window.JSFile = window.JSFile || {};
         var convertStringToArrayBuffer = function(str) {
             var array_buffer = new ArrayBuffer(str.length);
             var view = new Uint8Array(array_buffer);
-            for (var i = 0; i != str.length; ++i) {
+            for (var i = 0; i !== str.length; ++i) {
                 view[i] = str.charCodeAt(i) & 0xFF;
             }
             return array_buffer;
@@ -745,7 +730,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createOdsFile = function(workbook, file_extension) {
+        var createOdsFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -755,7 +740,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createXlsFile = function(workbook, file_extension) {
+        var createXlsFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -765,7 +750,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createTxtFile = function(workbook, file_extension) {
+        var createTxtFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -775,7 +760,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createCsvFile = function(workbook, file_extension) {
+        var createCsvFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -787,6 +772,7 @@ window.JSFile = window.JSFile || {};
          * @param file_mimetype
          */
         var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
+            var blob = null;
 
             // Blob is natively supported by all but ie8 & ie9
             // Blob.js creates a shim for ie8 & ie9
@@ -796,14 +782,14 @@ window.JSFile = window.JSFile || {};
             if (window.navigator.msSaveBlob) {
 
                 // create ie10 Blob
-                var blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
+                blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
 
                 // initiate ie10 download
                 return window.navigator.msSaveBlob(blob, filename);
             }
 
             // create Blob
-            var blob = new Blob([file_array_buffer], {type: file_mimetype});
+            blob = new Blob([file_array_buffer], {type: file_mimetype});
 
             // adownload is not supported by browser (ie8, ie9, Safari)
             if (!Modernizr.adownload) {
@@ -820,7 +806,6 @@ window.JSFile = window.JSFile || {};
             // initiate download
             return window.saveAs(blob, filename);
         };
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -843,20 +828,22 @@ window.JSFile = window.JSFile || {};
 
 })(window.JSFile);
 
-"use strict";
+(function() {
+    'use strict';
 
-// dependency checks
-if (typeof window._ === 'undefined') {
-    throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
-}
-if (typeof window.XLSX === 'undefined') {
-    throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
-}
-"use strict";
+    // dependency checks
+    if (typeof window._ === 'undefined') {
+        throw new Error("Please include Lodash (https://github.com/lodash/lodash)");
+    }
+    if (typeof window.XLSX === 'undefined') {
+        throw new Error("Please include js-xlsx (https://github.com/SheetJS/js-xlsx)");
+    }
+})();
 
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileReader Class
@@ -864,15 +851,12 @@ window.JSFile = window.JSFile || {};
      * @constructor
      */
     var FileReader = function() {
-
-        var self = this;
         var message_prefix = "FileReader: ";
 
         this.MESSAGE_FILE_DATA_IS_REQUIRED  = message_prefix + "file_data param is required";
         this.MESSAGE_FILE_TYPE_IS_REQUIRED  = message_prefix + "file_type param is required";
         this.MESSAGE_UNSUPPORTED_FILE_TYPE  = message_prefix + "file type is not supported";
         this.MESSAGE_FILE_READ_ERROR        = message_prefix + "could not read file. Either file data is invalid, or file_type does not match file_data.";
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -937,7 +921,6 @@ window.JSFile = window.JSFile || {};
             return this.file_to_array_handlers[file_type](file_data, worksheet_has_headings, group_by);
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // private methods
@@ -952,7 +935,7 @@ window.JSFile = window.JSFile || {};
          * @param group_by
          * @returns {*|Array}
          */
-        var txtToArray = function(text, worksheet_has_headings, group_by) {
+        var txtToArray = function(text, worksheet_has_headings) {
 
             var data = text.split(/\n/);
             _.forEach(data, function (item, index, data) {
@@ -970,7 +953,7 @@ window.JSFile = window.JSFile || {};
             if (has_heading_row) {
                 var result = [];
                 var headings = data[0];
-                _.forEach(data, function (row, row_index) {
+                _.forEach(data, function (row) {
                     var _row = {};
                     _.forEach(row, function (column, column_index) {
                         _row[headings[column_index]] = column;
@@ -1031,7 +1014,7 @@ window.JSFile = window.JSFile || {};
 
             try {
                 var workbook_data = window.XLS.read(data, {type: 'binary'});
-               result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
+                result = workbookDataToArray(workbook_data, worksheet_has_headings, group_by);
             } catch (error) {
                 throw new Error(this.MESSAGE_FILE_READ_ERROR);
             }
@@ -1047,7 +1030,7 @@ window.JSFile = window.JSFile || {};
          * @param group_by
          * @returns {Array}
          */
-        var workbookDataToArray = function(data, worksheet_has_headings, group_by) {
+        var workbookDataToArray = function(data, worksheet_has_headings) {
 
             var result = [];
             var index = 0;
@@ -1163,7 +1146,6 @@ window.JSFile = window.JSFile || {};
 
             return result;
         };
-
 
         ///////////////////////////////////////////////////////////
         //

@@ -1,8 +1,7 @@
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileDownloader Class
@@ -19,7 +18,6 @@ window.JSFile = window.JSFile || {};
         this.MESSAGE_FILE_NAME_IS_REQUIRED      = message_prefix + "file_name is required";
         this.CURRENTLY_UNSUPPORTED_FILE_TYPE    = message_prefix + "this file type is currently not supported.";
         this.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK = message_prefix + "browser does support the required feature and no fallback method was provided";
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -51,15 +49,14 @@ window.JSFile = window.JSFile || {};
             var file_data = module.FileUtil.transformFilenameAndExtension(filename, file_extension);
 
             // create file array buffer
-            var file_array_buffer = this.create_file_handlers[file_data['file_extension']](workbook, file_data['file_extension']);
+            var file_array_buffer = this.create_file_handlers[file_data.file_extension](workbook, file_data.file_extension);
 
             // get file mime_type
-            var file_mimetype = module.FileUtil.getFileMimeType(file_data['file_extension']);
+            var file_mimetype = module.FileUtil.getFileMimeType(file_data.file_extension);
 
             // initiate download
-            initiateFileDownload(file_array_buffer, file_data['filename'], file_mimetype);
+            initiateFileDownload(file_array_buffer, file_data.filename, file_mimetype);
         };
-
 
         ///////////////////////////////////////////////////////////
         //
@@ -76,7 +73,7 @@ window.JSFile = window.JSFile || {};
         var convertStringToArrayBuffer = function(str) {
             var array_buffer = new ArrayBuffer(str.length);
             var view = new Uint8Array(array_buffer);
-            for (var i = 0; i != str.length; ++i) {
+            for (var i = 0; i !== str.length; ++i) {
                 view[i] = str.charCodeAt(i) & 0xFF;
             }
             return array_buffer;
@@ -99,7 +96,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createOdsFile = function(workbook, file_extension) {
+        var createOdsFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -109,7 +106,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createXlsFile = function(workbook, file_extension) {
+        var createXlsFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -119,7 +116,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createTxtFile = function(workbook, file_extension) {
+        var createTxtFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -129,7 +126,7 @@ window.JSFile = window.JSFile || {};
          * @param workbook
          * @param file_extension
          */
-        var createCsvFile = function(workbook, file_extension) {
+        var createCsvFile = function() {
             throw new Error(this.CURRENTLY_UNSUPPORTED_FILE_TYPE);
         };
 
@@ -141,6 +138,7 @@ window.JSFile = window.JSFile || {};
          * @param file_mimetype
          */
         var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
+            var blob = null;
 
             // Blob is natively supported by all but ie8 & ie9
             // Blob.js creates a shim for ie8 & ie9
@@ -150,14 +148,14 @@ window.JSFile = window.JSFile || {};
             if (window.navigator.msSaveBlob) {
 
                 // create ie10 Blob
-                var blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
+                blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
 
                 // initiate ie10 download
                 return window.navigator.msSaveBlob(blob, filename);
             }
 
             // create Blob
-            var blob = new Blob([file_array_buffer], {type: file_mimetype});
+            blob = new Blob([file_array_buffer], {type: file_mimetype});
 
             // adownload is not supported by browser (ie8, ie9, Safari)
             if (!Modernizr.adownload) {
@@ -174,7 +172,6 @@ window.JSFile = window.JSFile || {};
             // initiate download
             return window.saveAs(blob, filename);
         };
-
 
         ///////////////////////////////////////////////////////////
         //

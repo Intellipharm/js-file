@@ -3,10 +3,10 @@ describe("Workbook Model", function() {
     var Model, WorksheetModel;
     var data = [
         {
-            "name": "Sheet Name",
-            "headers": [[{"value": "First Name"}]],
-            "data": [[{"value": "John"}]],
-            "columns": [{"type": "string"}]
+            name: "Sheet Name",
+            headers: [[{value: "First Name"}]],
+            data: [[{value: "John"}]],
+            columns: [{type: "string"}]
         }
     ];
 
@@ -24,7 +24,7 @@ describe("Workbook Model", function() {
 
         it("should throw an error if no data is passed", function () {
             expect(function () {
-                var result = new Model();
+                new Model();
             }).toThrowError();
         });
 
@@ -33,7 +33,7 @@ describe("Workbook Model", function() {
             spyOn(window.JSFile.FileUtil, 'transformData');
 
             var data = ["A"];
-            var result = new Model(data);
+            new Model(data);
 
             expect(window.JSFile.FileUtil.transformData).toHaveBeenCalledWith(data);
         });

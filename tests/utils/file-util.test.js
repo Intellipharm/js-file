@@ -98,39 +98,39 @@ describe("FileUtil", function() {
 
         var headers = [
             [
-                {"value": "First",      "rowspan": 1, "colspan": 1},
-                {"value": "Name",       "rowspan": 3, "colspan": 1},
-                {"value": "Position",   "rowspan": 2, "colspan": 1},
-                {"value": "Stuff",      "rowspan": 1, "colspan": 3},
-                {"value": "",           "rowspan": 1, "colspan": 1}
+                {value: "First",      rowspan: 1, colspan: 1},
+                {value: "Name",       rowspan: 3, colspan: 1},
+                {value: "Position",   rowspan: 2, colspan: 1},
+                {value: "Stuff",      rowspan: 1, colspan: 3},
+                {value: "",           rowspan: 1, colspan: 1}
             ],
             [
-                {"value": "Second",     "rowspan": 1, "colspan": 1},
-                {"value": "Office",     "rowspan": 1, "colspan": 1},
-                {"value": "Age",        "rowspan": 1, "colspan": 1},
-                {"value": "Start date", "rowspan": 1, "colspan": 1},
-                {"value": "Salary",     "rowspan": 1, "colspan": 1}
+                {value: "Second",     rowspan: 1, colspan: 1},
+                {value: "Office",     rowspan: 1, colspan: 1},
+                {value: "Age",        rowspan: 1, colspan: 1},
+                {value: "Start date", rowspan: 1, colspan: 1},
+                {value: "Salary",     rowspan: 1, colspan: 1}
             ]
         ];
 
         var expected_result = [
             [
-                {"value": "First",      "rowspan": 1, "colspan": 1},
-                {"value": "Name",       "rowspan": 3, "colspan": 1},
-                {"value": "Position",   "rowspan": 2, "colspan": 1},
-                {"value": "Stuff",      "rowspan": 1, "colspan": 3},
+                {value: "First",      rowspan: 1, colspan: 1},
+                {value: "Name",       rowspan: 3, colspan: 1},
+                {value: "Position",   rowspan: 2, colspan: 1},
+                {value: "Stuff",      rowspan: 1, colspan: 3},
                 {}, // inserted
                 {}, // inserted
-                {"value": "",           "rowspan": 1, "colspan": 1}
+                {value: "",           rowspan: 1, colspan: 1}
             ],
             [
-                {"value": "Second",     "rowspan": 1, "colspan": 1},
+                {value: "Second",     rowspan: 1, colspan: 1},
                 {}, // inserted
                 {}, // inserted
-                {"value": "Office",     "rowspan": 1, "colspan": 1},
-                {"value": "Age",        "rowspan": 1, "colspan": 1},
-                {"value": "Start date", "rowspan": 1, "colspan": 1},
-                {"value": "Salary",     "rowspan": 1, "colspan": 1}
+                {value: "Office",     rowspan: 1, colspan: 1},
+                {value: "Age",        rowspan: 1, colspan: 1},
+                {value: "Start date", rowspan: 1, colspan: 1},
+                {value: "Salary",     rowspan: 1, colspan: 1}
             ],
             [
                 {},
@@ -152,22 +152,22 @@ describe("FileUtil", function() {
 
         var headers = [
             [
-                {"value": "First",      "rowspan": 1, "colspan": 1},
-                {"value": "Name",       "rowspan": 3, "colspan": 1},
-                {"value": "Position",   "rowspan": 2, "colspan": 1},
-                {"value": "Stuff",      "rowspan": 1, "colspan": 3},
+                {value: "First",      rowspan: 1, colspan: 1},
+                {value: "Name",       rowspan: 3, colspan: 1},
+                {value: "Position",   rowspan: 2, colspan: 1},
+                {value: "Stuff",      rowspan: 1, colspan: 3},
                 {}, // inserted
                 {}, // inserted
-                {"value": "",           "rowspan": 1, "colspan": 1}
+                {value: "",           rowspan: 1, colspan: 1}
             ],
             [
-                {"value": "Second",     "rowspan": 1, "colspan": 1},
+                {value: "Second",     rowspan: 1, colspan: 1},
                 {}, // inserted
                 {}, // inserted
-                {"value": "Office",     "rowspan": 1, "colspan": 1},
-                {"value": "Age",        "rowspan": 1, "colspan": 1},
-                {"value": "Start date", "rowspan": 1, "colspan": 1},
-                {"value": "Salary",     "rowspan": 1, "colspan": 1}
+                {value: "Office",     rowspan: 1, colspan: 1},
+                {value: "Age",        rowspan: 1, colspan: 1},
+                {value: "Start date", rowspan: 1, colspan: 1},
+                {value: "Salary",     rowspan: 1, colspan: 1}
             ],
             [
                 {},
@@ -176,16 +176,16 @@ describe("FileUtil", function() {
         ];
 
         var expected_result = {
-            'A1': "First",
-            'B1': "Name",
-            'C1': "Position",
-            'D1': "Stuff",
-            'G1': "",
-            'A2': "Second",
-            'D2': "Office",
-            'E2': "Age",
-            'F2': "Start date",
-            'G2': "Salary"
+            A1: "First",
+            B1: "Name",
+            C1: "Position",
+            D1: "Stuff",
+            G1: "",
+            A2: "Second",
+            D2: "Office",
+            E2: "Age",
+            F2: "Start date",
+            G2: "Salary"
         };
 
         it("should return as expected", function () {
@@ -202,22 +202,22 @@ describe("FileUtil", function() {
 
         var headers = [
             [
-                {"value": "First",      "rowspan": 1, "colspan": 1},
-                {"value": "Name",       "rowspan": 3, "colspan": 1},
-                {"value": "Position",   "rowspan": 2, "colspan": 1},
-                {"value": "Stuff",      "rowspan": 1, "colspan": 3},
+                {value: "First",      rowspan: 1, colspan: 1},
+                {value: "Name",       rowspan: 3, colspan: 1},
+                {value: "Position",   rowspan: 2, colspan: 1},
+                {value: "Stuff",      rowspan: 1, colspan: 3},
                 {}, // inserted
                 {}, // inserted
-                {"value": "",           "rowspan": 1, "colspan": 1}
+                {value: "",           rowspan: 1, colspan: 1}
             ],
             [
-                {"value": "Second",     "rowspan": 1, "colspan": 1},
+                {value: "Second",     rowspan: 1, colspan: 1},
                 {}, // inserted
                 {}, // inserted
-                {"value": "Office",     "rowspan": 1, "colspan": 1},
-                {"value": "Age",        "rowspan": 1, "colspan": 1},
-                {"value": "Start date", "rowspan": 1, "colspan": 1},
-                {"value": "Salary",     "rowspan": 1, "colspan": 1}
+                {value: "Office",     rowspan: 1, colspan: 1},
+                {value: "Age",        rowspan: 1, colspan: 1},
+                {value: "Start date", rowspan: 1, colspan: 1},
+                {value: "Salary",     rowspan: 1, colspan: 1}
             ],
             [
                 {},
@@ -227,16 +227,16 @@ describe("FileUtil", function() {
 
         var expected_result = [
             {
-                s: {c:1, r: 0}, // me
-                e: {c:1, r: 2}  // my merge
+                s: {c: 1, r: 0}, // me
+                e: {c: 1, r: 2}  // my merge
             },
             {
-                s: {c:2, r: 0}, // me
-                e: {c:2, r: 1}  // my merge
+                s: {c: 2, r: 0}, // me
+                e: {c: 2, r: 1}  // my merge
             },
             {
-                s: {c:3, r: 0}, // me
-                e: {c:5, r: 0}  // my merge
+                s: {c: 3, r: 0}, // me
+                e: {c: 5, r: 0}  // my merge
             }
         ];
 
@@ -358,46 +358,46 @@ describe("FileUtil", function() {
 
         it("should throw an error if file_name is not provided", function () {
             expect(function () {
-                var result = Util.transformFilenameAndExtension();
+                Util.transformFilenameAndExtension();
             }).toThrowError(Util.MESSAGE_FILE_NAME_IS_REQUIRED);
         });
 
         it("should throw an error if file_extension is not supported", function () {
             expect(function () {
-                var result = Util.transformFilenameAndExtension('asdasds', 'aaaa');
+                Util.transformFilenameAndExtension('asdasds', 'aaaa');
             }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
         });
 
         it("should throw an error if file_name contains a valid extension that does not match file_extension", function () {
             expect(function () {
-                var result = Util.transformFilenameAndExtension('asdasds.xls', 'xlsx');
+                Util.transformFilenameAndExtension('asdasds.xls', 'xlsx');
             }).toThrowError(Util.MESSAGE_FILE_EXTENSION_MISMATCH);
         });
 
         it("should throw an error if file_name does not contains a valid and file_extension is not provided", function () {
             expect(function () {
-                var result = Util.transformFilenameAndExtension('asdasds.asdsa');
+                Util.transformFilenameAndExtension('asdasds.asdsa');
             }).toThrowError(Util.MESSAGE_FILE_EXTENSION_IS_REQUIRED);
         });
 
         it("should add file_extension to filename is not set", function () {
             var result = Util.transformFilenameAndExtension('aaa', 'xls');
-            expect(result['filename']).toEqual('aaa.xls');
+            expect(result.filename).toEqual('aaa.xls');
         });
 
         it("should not add file_extension if already set in filename", function () {
             var result = Util.transformFilenameAndExtension('aaa.xls', 'xls');
-            expect(result['filename']).toEqual('aaa.xls');
+            expect(result.filename).toEqual('aaa.xls');
         });
 
         it("should not add file_extension if already set in filename, if file_extension if not provided", function () {
             var result = Util.transformFilenameAndExtension('aaa.xls');
-            expect(result['filename']).toEqual('aaa.xls');
+            expect(result.filename).toEqual('aaa.xls');
         });
 
         it("should return extracted extension", function () {
             var result = Util.transformFilenameAndExtension('aaa.xls');
-            expect(result['file_extension']).toEqual('xls');
+            expect(result.file_extension).toEqual('xls');
         });
     });
 
@@ -409,7 +409,7 @@ describe("FileUtil", function() {
 
         it("should throw an error if mimetype is unsupported", function () {
             expect(function () {
-                var result = Util.getFileExtension('asdasds');
+                Util.getFileExtension('asdasds');
             }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_MIMETYPE);
         });
 
@@ -443,7 +443,7 @@ describe("FileUtil", function() {
 
         it("should throw an error if extension is unsupported", function () {
             expect(function () {
-                var result = Util.getFileMimeType('asdasds');
+                Util.getFileMimeType('asdasds');
             }).toThrowError(Util.MESSAGE_UNSUPPORTED_FILE_EXTENSION);
         });
 

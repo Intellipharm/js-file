@@ -16,13 +16,13 @@ describe("Worksheet Model", function() {
 
         it("should throw an error if no data is passed", function () {
             expect(function () {
-                var result = new Model();
+                new Model();
             }).toThrowError();
         });
 
         it("should throw an error if no data.value is passed", function () {
             expect(function () {
-                var result = new Model({});
+                new Model({});
             }).toThrowError();
         });
 
@@ -32,7 +32,5 @@ describe("Worksheet Model", function() {
             expect(result.t).toEqual('s');
             expect(result.v).toEqual('AAA');
         });
-
-
     });
 });

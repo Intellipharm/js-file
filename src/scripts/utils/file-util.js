@@ -1,8 +1,7 @@
-"use strict";
-
 window.JSFile = window.JSFile || {};
 
 (function(module) {
+    'use strict';
 
     /**
      * FileUtil Class
@@ -39,7 +38,6 @@ window.JSFile = window.JSFile || {};
             }
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // public methods
@@ -59,7 +57,7 @@ window.JSFile = window.JSFile || {};
             }
 
             // loop sheets
-            _.forEach(data, function (item, index, obj) {
+            _.forEach(data, function (item, index) {
 
                 // transform sheet
                 data[index] = transformSheet(item, index);
@@ -208,7 +206,7 @@ window.JSFile = window.JSFile || {};
                                 headers[next_row] = [];
 
                                 // create next row columns
-                                for (var i=0; i<column_index; i++) {
+                                for (var i = 0; i < column_index; i++) {
                                     headers[next_row].push({});
                                 }
                             }
@@ -249,7 +247,7 @@ window.JSFile = window.JSFile || {};
 
                 var letter = "A";
 
-                _.forEach(row, function(column, column_index) {
+                _.forEach(row, function(column) {
 
                     // add value (if exists)
                     if (_.has(column, 'value')) {
@@ -324,7 +322,6 @@ window.JSFile = window.JSFile || {};
             return module.supported_file_types[file_extension];
         };
 
-
         ///////////////////////////////////////////////////////////
         //
         // private methods
@@ -356,7 +353,7 @@ window.JSFile = window.JSFile || {};
             }
             // name
             if (!_.has(data, 'name') || _.isUndefined(data.name)) {
-                data.name = findAlternativeData(data, keys, data_alternatives.sheet.name, "sheet" + (index+1));
+                data.name = findAlternativeData(data, keys, data_alternatives.sheet.name, "sheet" + (index + 1));
             }
 
             return {
@@ -368,20 +365,6 @@ window.JSFile = window.JSFile || {};
         };
 
         /**
-         * transformColumn
-         *
-         * @param column
-         * @param header
-         * @returns {{type: *}}
-         */
-        var transformColumn = function(column, header) {
-
-            return {
-                type: _.has(column, 'type') ? column.type : (_.has(header, 'type') ? header.type : 'string')
-            }
-        };
-
-        /**
          * transformHeader
          *
          * @param data
@@ -389,17 +372,17 @@ window.JSFile = window.JSFile || {};
         var transformHeader = function(data) {
 
             var _data = {};
-            var keys= [];
+            var keys = [];
 
             // loop fields
 
-            _.forEach(data, function (item, key, obj) {
+            _.forEach(data, function (item, key) {
 
                 // convert item keys & values to snake case
                 if (!_.isObject(item)) {
-                    var key     = _.snakeCase(key);
-                    _data[key]  = item;
-                    keys.push(key);
+                    var k     = _.snakeCase(key);
+                    _data[k]  = item;
+                    keys.push(k);
                 }
             });
 
@@ -445,7 +428,7 @@ window.JSFile = window.JSFile || {};
             });
 
             return result;
-        }
+        };
     };
 
     // create singleton
