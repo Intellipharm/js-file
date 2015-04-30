@@ -627,9 +627,6 @@ window.JSFile = window.JSFile || {};
     if (typeof window.Blob === 'undefined') {
         throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
     }
-    if (typeof window.saveAs === 'undefined') {
-        throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
-    }
 })();
 
 window.JSFile = window.JSFile || {};
@@ -787,8 +784,7 @@ window.JSFile = window.JSFile || {};
             }
 
             // adownload is not supported by browser (ie8, ie9, Safari)
-            if (!Modernizr.adownload) {
-
+            if (!Modernizr.adownload || !window.saveAs) {
                 // no initiateFileDownloadFallback method is defined
                 if (_.isUndefined(self.initiateFileDownloadFallback)) {
                     throw new Error(self.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK);

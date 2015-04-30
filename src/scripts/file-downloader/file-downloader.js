@@ -11,7 +11,4 @@
     if (typeof window.Blob === 'undefined') {
         throw new Error("Please include blob (https://github.com/eligrey/Blob.js/)");
     }
-    if (typeof window.saveAs === 'undefined') {
-        throw new Error("Please include file-saver (https://github.com/eligrey/FileSaver.js/)");
-    }
 })();

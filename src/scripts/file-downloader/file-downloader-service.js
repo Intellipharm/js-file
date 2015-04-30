@@ -153,7 +153,7 @@ window.JSFile = window.JSFile || {};
             }
 
             // adownload is not supported by browser (ie8, ie9, Safari)
-            if (!Modernizr.adownload) {
+            if (!Modernizr.adownload || !window.saveAs) {
 
                 // no initiateFileDownloadFallback method is defined
                 if (_.isUndefined(self.initiateFileDownloadFallback)) {
