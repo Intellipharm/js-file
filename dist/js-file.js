@@ -772,7 +772,8 @@ window.JSFile = window.JSFile || {};
          * @param file_mimetype
          */
         var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
-            var blob = null;
+            // create Blob
+            var blob = new Blob([file_array_buffer], {type: file_mimetype});
 
             // Blob is natively supported by all but ie8 & ie9
             // Blob.js creates a shim for ie8 & ie9
@@ -781,15 +782,9 @@ window.JSFile = window.JSFile || {};
             // if browser is IE10+
             if (window.navigator.msSaveBlob) {
 
-                // create ie10 Blob
-                blob = new Blob(["\ufeff", file_array_buffer], {type: file_mimetype});
-
                 // initiate ie10 download
                 return window.navigator.msSaveBlob(blob, filename);
             }
-
-            // create Blob
-            blob = new Blob([file_array_buffer], {type: file_mimetype});
 
             // adownload is not supported by browser (ie8, ie9, Safari)
             if (!Modernizr.adownload) {

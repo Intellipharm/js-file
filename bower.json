@@ -1,6 +1,6 @@
 {
     "name": "js-file",
-    "version": "0.0.2",
+    "version": "0.1.1",
     "homepage": "https://github.com/Intellipharm/js-file",
     "authors": [
         "Intellipharm <damian@intellipharm.com.au>",
@@ -22,16 +22,9 @@
     ],
     "license": "MIT",
     "ignore": [
-        "bower_components",
-        "grunt",
-        "lib",
-        "node_modules",
-        "tests",
-        ".gitignore",
-        "Gruntfile.js",
-        "LICENSE",
-        "bower.json",
-        "package.json"
+        "*",
+        "!dist/",
+        "!dist/*"
     ],
     "dependencies": {
         "lodash": "~3.7.0",
