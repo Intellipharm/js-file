@@ -680,13 +680,13 @@ window.JSFile = window.JSFile || {};
             var file_data = module.FileUtil.transformFilenameAndExtension(filename, file_extension);
 
             // create file array buffer
-            var file_array_buffer = this.create_file_handlers[file_data.file_extension](workbook, file_data.file_extension);
+            var file_array_buffer_string = this.create_file_handlers[file_data.file_extension](workbook, file_data.file_extension);
 
             // get file mime_type
             var file_mimetype = module.FileUtil.getFileMimeType(file_data.file_extension);
 
             // initiate download
-            initiateFileDownload(file_array_buffer, file_data.filename, file_mimetype);
+            initiateFileDownload(file_array_buffer_string, file_data.filename, file_mimetype);
         };
 
         ///////////////////////////////////////////////////////////
@@ -717,8 +717,7 @@ window.JSFile = window.JSFile || {};
          * @param file_extension
          */
         var createXlsxFile = function(workbook, file_extension) {
-            var workbook_output = XLSX.write(workbook, {bookType: file_extension, bookSST: false, type: 'binary'});
-            return convertStringToArrayBuffer(workbook_output);
+            return XLSX.write(workbook, {bookType: file_extension, bookSST: false, type: 'binary'});
         };
 
         /**
@@ -768,7 +767,9 @@ window.JSFile = window.JSFile || {};
          * @param filename
          * @param file_mimetype
          */
-        var initiateFileDownload = function(file_array_buffer, filename, file_mimetype) {
+        var initiateFileDownload = function(file_array_buffer_string, filename, file_mimetype) {
+            var file_array_buffer = convertStringToArrayBuffer(file_array_buffer_string);
+
             // create Blob
             var blob = new Blob([file_array_buffer], {type: file_mimetype});
 
@@ -785,13 +786,14 @@ window.JSFile = window.JSFile || {};
 
             // adownload is not supported by browser (ie8, ie9, Safari)
             if (!Modernizr.adownload || !window.saveAs) {
+
                 // no initiateFileDownloadFallback method is defined
                 if (_.isUndefined(self.initiateFileDownloadFallback)) {
                     throw new Error(self.UNSUPPORTED_BROWSER_FEATURE_AND_NO_FALLBACK);
                 }
 
                 // call initiate download fallback
-                return self.initiateFileDownloadFallback(blob, filename);
+                return self.initiateFileDownloadFallback(blob, filename, file_array_buffer_string);
             }
 
             // initiate download
