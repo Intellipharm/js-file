@@ -27,7 +27,7 @@
         "!dist/*"
     ],
     "dependencies": {
-        "lodash": "~3.7.0",
+        "lodash": "^3.7.0",
         "js-xls": "~0.7.5",
         "js-xlsx": "~0.8.0",
         "modernizr": "~2.8.3",
