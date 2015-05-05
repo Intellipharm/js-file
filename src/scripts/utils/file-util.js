@@ -190,9 +190,15 @@ window.JSFile = window.JSFile || {};
          * @returns {Array}
          */
         this.transformWorksheetHeadersArray = function(headers) {
+            var temp = [];
 
             _.forEach(headers, function (row, row_index) {
+                if (!temp[row_index]) {
+                    temp.push([]);
+                }
+
                 _.forEach(row, function (column, column_index) {
+                    temp[row_index].push(_.cloneDeep(column));
 
                     // add rows
                     if (column.rowspan > 1) {
@@ -202,17 +208,17 @@ window.JSFile = window.JSFile || {};
                             var next_row = row_index + row_count;
 
                             // create next row if does not exist
-                            if (!_.has(headers, next_row)) {
-                                headers[next_row] = [];
+                            if (!_.has(temp, next_row)) {
+                                temp[next_row] = [];
 
                                 // create next row columns
                                 for (var i = 0; i < column_index; i++) {
-                                    headers[next_row].push({});
+                                    temp[next_row].push({});
                                 }
                             }
 
                             // splice into next row
-                            headers[next_row].splice(column_index, 0, {});
+                            temp[next_row].splice(column_index, 0, {});
                         }
                     }
 
@@ -224,13 +230,13 @@ window.JSFile = window.JSFile || {};
                             var next_column = column_index + column_count;
 
                             // splice into next column
-                            headers[row_index].splice(next_column, 0, {});
+                            temp[row_index].push({});
                         }
                     }
                 });
             });
 
-            return headers;
+            return temp;
         };
 
         /**
