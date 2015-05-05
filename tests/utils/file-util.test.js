@@ -95,50 +95,99 @@ describe("FileUtil", function() {
     //--------------------------------------------
 
     describe("transformWorksheetHeadersArray", function() {
-
-        var headers = [
-            [
-                {value: "First",      rowspan: 1, colspan: 1},
-                {value: "Name",       rowspan: 3, colspan: 1},
-                {value: "Position",   rowspan: 2, colspan: 1},
-                {value: "Stuff",      rowspan: 1, colspan: 3},
-                {value: "",           rowspan: 1, colspan: 1}
-            ],
-            [
-                {value: "Second",     rowspan: 1, colspan: 1},
-                {value: "Office",     rowspan: 1, colspan: 1},
-                {value: "Age",        rowspan: 1, colspan: 1},
-                {value: "Start date", rowspan: 1, colspan: 1},
-                {value: "Salary",     rowspan: 1, colspan: 1}
-            ]
-        ];
-
-        var expected_result = [
-            [
-                {value: "First",      rowspan: 1, colspan: 1},
-                {value: "Name",       rowspan: 3, colspan: 1},
-                {value: "Position",   rowspan: 2, colspan: 1},
-                {value: "Stuff",      rowspan: 1, colspan: 3},
-                {}, // inserted
-                {}, // inserted
-                {value: "",           rowspan: 1, colspan: 1}
-            ],
-            [
-                {value: "Second",     rowspan: 1, colspan: 1},
-                {}, // inserted
-                {}, // inserted
-                {value: "Office",     rowspan: 1, colspan: 1},
-                {value: "Age",        rowspan: 1, colspan: 1},
-                {value: "Start date", rowspan: 1, colspan: 1},
-                {value: "Salary",     rowspan: 1, colspan: 1}
-            ],
-            [
-                {},
-                {}
-            ]
-        ];
-
         it("should return as expected", function () {
+            var headers = [
+                [
+                    {value: "First",      rowspan: 1, colspan: 1},
+                    {value: "Name",       rowspan: 3, colspan: 1},
+                    {value: "Position",   rowspan: 2, colspan: 1},
+                    {value: "Stuff",      rowspan: 1, colspan: 3},
+                    {value: "",           rowspan: 1, colspan: 1}
+                ],
+                [
+                    {value: "Second",     rowspan: 1, colspan: 1},
+                    {value: "Office",     rowspan: 1, colspan: 1},
+                    {value: "Age",        rowspan: 1, colspan: 1},
+                    {value: "Start date", rowspan: 1, colspan: 1},
+                    {value: "Salary",     rowspan: 1, colspan: 1}
+                ]
+            ];
+
+            var expected_result = [
+                [
+                    {value: "First",      rowspan: 1, colspan: 1},
+                    {value: "Name",       rowspan: 3, colspan: 1},
+                    {value: "Position",   rowspan: 2, colspan: 1},
+                    {value: "Stuff",      rowspan: 1, colspan: 3},
+                    {}, // inserted
+                    {}, // inserted
+                    {value: "",           rowspan: 1, colspan: 1}
+                ],
+                [
+                    {value: "Second",     rowspan: 1, colspan: 1},
+                    {}, // inserted
+                    {}, // inserted
+                    {value: "Office",     rowspan: 1, colspan: 1},
+                    {value: "Age",        rowspan: 1, colspan: 1},
+                    {value: "Start date", rowspan: 1, colspan: 1},
+                    {value: "Salary",     rowspan: 1, colspan: 1}
+                ],
+                [
+                    {},
+                    {}
+                ]
+            ];
+            var result = Util.transformWorksheetHeadersArray(headers);
+            expect(expected_result).toEqual(result);
+        });
+
+        it("should return as expected again", function () {
+            var headers = [
+                [
+                    {value: "Category", rowspan: 2},
+                    {value: "Apotex Share", colspan: 3},
+                    {value: "Innovator Share", colspan: 3},
+                    {value: "Other Share", colspan: 3}
+                ],
+                [
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"},
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"},
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"}
+                ]
+            ];
+
+            var expected_result = [
+                [
+                    {value: "Category", rowspan: 2},
+                    {value: "Apotex Share", colspan: 3},
+                    {}, // inserted
+                    {}, // inserted
+                    {value: "Innovator Share", colspan: 3},
+                    {}, // inserted
+                    {}, // inserted
+                    {value: "Other Share", colspan: 3},
+                    {}, // inserted
+                    {}, // inserted
+                ],
+                [
+                    {}, // inserted
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"},
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"},
+                    {value: "U"},
+                    {value: "$"},
+                    {value: "%"},
+                ]
+            ];
             var result = Util.transformWorksheetHeadersArray(headers);
             expect(expected_result).toEqual(result);
         });

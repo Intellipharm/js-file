@@ -190,15 +190,12 @@ window.JSFile = window.JSFile || {};
          * @returns {Array}
          */
         this.transformWorksheetHeadersArray = function(headers) {
-            var temp = [];
+            var temp = _.cloneDeep(headers);
 
             _.forEach(headers, function (row, row_index) {
-                if (!temp[row_index]) {
-                    temp.push([]);
-                }
+                var column_index_offset = 0;
 
                 _.forEach(row, function (column, column_index) {
-                    temp[row_index].push(_.cloneDeep(column));
 
                     // add rows
                     if (column.rowspan > 1) {
@@ -212,13 +209,13 @@ window.JSFile = window.JSFile || {};
                                 temp[next_row] = [];
 
                                 // create next row columns
-                                for (var i = 0; i < column_index; i++) {
+                                for (var i = 0; i < column_index + column_index_offset; i++) {
                                     temp[next_row].push({});
                                 }
                             }
 
                             // splice into next row
-                            temp[next_row].splice(column_index, 0, {});
+                            temp[next_row].splice(column_index + column_index_offset, 0, {});
                         }
                     }
 
@@ -227,11 +224,12 @@ window.JSFile = window.JSFile || {};
 
                         for (var column_count = 1; column_count < column.colspan; column_count++) {
 
-                            var next_column = column_index + column_count;
-
+                            var next_column = column_index + column_index_offset + column_count;
                             // splice into next column
-                            temp[row_index].push({});
+                            temp[row_index].splice(next_column, 0, {});
                         }
+
+                        column_index_offset += column.colspan - 1;
                     }
                 });
             });
