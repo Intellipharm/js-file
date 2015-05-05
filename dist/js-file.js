@@ -215,8 +215,11 @@ window.JSFile = window.JSFile || {};
          * @returns {Array}
          */
         this.transformWorksheetHeadersArray = function(headers) {
+            var temp = _.cloneDeep(headers);
 
             _.forEach(headers, function (row, row_index) {
+                var column_index_offset = 0;
+
                 _.forEach(row, function (column, column_index) {
 
                     // add rows
@@ -227,17 +230,17 @@ window.JSFile = window.JSFile || {};
                             var next_row = row_index + row_count;
 
                             // create next row if does not exist
-                            if (!_.has(headers, next_row)) {
-                                headers[next_row] = [];
+                            if (!_.has(temp, next_row)) {
+                                temp[next_row] = [];
 
                                 // create next row columns
-                                for (var i = 0; i < column_index; i++) {
-                                    headers[next_row].push({});
+                                for (var i = 0; i < column_index + column_index_offset; i++) {
+                                    temp[next_row].push({});
                                 }
                             }
 
                             // splice into next row
-                            headers[next_row].splice(column_index, 0, {});
+                            temp[next_row].splice(column_index + column_index_offset, 0, {});
                         }
                     }
 
@@ -246,16 +249,17 @@ window.JSFile = window.JSFile || {};
 
                         for (var column_count = 1; column_count < column.colspan; column_count++) {
 
-                            var next_column = column_index + column_count;
-
+                            var next_column = column_index + column_index_offset + column_count;
                             // splice into next column
-                            headers[row_index].splice(next_column, 0, {});
+                            temp[row_index].splice(next_column, 0, {});
                         }
+
+                        column_index_offset += column.colspan - 1;
                     }
                 });
             });
 
-            return headers;
+            return temp;
         };
 
         /**
