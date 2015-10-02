@@ -16,11 +16,34 @@ window.JSFile = window.JSFile || {};
         this.MESSAGE_UNSUPPORTED_FILE_TYPE  = message_prefix + "file type is not supported";
         this.MESSAGE_FILE_READ_ERROR        = message_prefix + "could not read file. Either file data is invalid, or file_type does not match file_data.";
 
+        var file_types = {
+            'text/plain': "txt",
+            'text/csv': "csv",
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': "xlsx",
+            'application/vnd.ms-excel': "xls",
+            'application/vnd.oasis.opendocument.spreadsheet': "ods"
+        };
+
         ///////////////////////////////////////////////////////////
         //
         // public methods
         //
         ///////////////////////////////////////////////////////////
+
+        /**
+         * getFileType
+         *
+         * @param type
+         * @returns {*}
+         */
+        this.getFileType = function(type) {
+
+            if (!_.contains(_.keys(file_types), type)) {
+                throw new Error(this.MESSAGE_UNSUPPORTED_FILE_TYPE);
+            }
+
+            return file_types[type];
+        };
 
         /**
          * getWorksheetNames
@@ -330,4 +353,3 @@ window.JSFile = window.JSFile || {};
     module.FileReader = new FileReader();
 
 })(window.JSFile);
-
