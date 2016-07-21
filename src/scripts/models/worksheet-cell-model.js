@@ -23,7 +23,7 @@ window.JSFile = window.JSFile || {};
 
         this.t = _.has(data, 'type') ? data.type : 's';
         this.v = '';
-        
+
         if (data.value !== null) {
             this.v = data.value;
         }

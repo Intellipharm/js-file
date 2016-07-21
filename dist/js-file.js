@@ -613,7 +613,11 @@ window.JSFile = window.JSFile || {};
         }
 
         this.t = _.has(data, 'type') ? data.type : 's';
-        this.v = data.value;
+        this.v = '';
+
+        if (data.value !== null) {
+            this.v = data.value;
+        }
     };
 
 })(window.JSFile);
@@ -1169,4 +1173,3 @@ window.JSFile = window.JSFile || {};
     module.FileReader = new FileReader();
 
 })(window.JSFile);
-

@@ -16,7 +16,7 @@ module.exports = function(config) {
 		files: [
 
             // 3p dependencies
-			'bower_components/lodash/lodash.min.js',
+			'bower_components/lodash/dist/lodash.min.js',
 			'bower_components/js-xls/dist/xls.min.js',
 			'bower_components/js-xlsx/dist/xlsx.full.min.js',
 			'bower_components/js-xlsx/dist/ods.js',
