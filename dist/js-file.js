@@ -325,15 +325,21 @@ window.JSFile = window.JSFile || {};
          * @param mimetype
          * @returns {*}
          */
-        this.getFileExtension = function(file_mimetype) {
-
+        this.getFileExtension = function(file_extension, file_mimetype) {
             if (!_.includes(_.values(module.supported_file_types), file_mimetype)) {
                 throw new Error(this.MESSAGE_UNSUPPORTED_FILE_MIMETYPE);
             }
 
-            return _.findKey(module.supported_file_types, function(n) {
+            var type = _.findKey(module.supported_file_types, function(n) {
                 return n === file_mimetype;
             });
+
+            // windows always sends csv as the same mime type of xls
+            if (navigator.platform.indexOf('Win') !== -1 && file_extension === 'csv' && type === 'xls') {
+                return file_extension;
+            }
+
+            return type;
         };
 
         /**
