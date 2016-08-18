@@ -463,23 +463,27 @@ describe("FileUtil", function() {
         });
 
         it("should return txt", function () {
-            var result = Util.getFileExtension('text/plain');
+            var result = Util.getFileExtension('txt', 'text/plain');
             expect(result).toEqual('txt');
         });
         it("should return csv", function () {
-            var result = Util.getFileExtension('text/csv');
+            var result = Util.getFileExtension('csv', 'text/csv');
             expect(result).toEqual('csv');
         });
         it("should return xlsx", function () {
-            var result = Util.getFileExtension('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            var result = Util.getFileExtension('xlsx', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
             expect(result).toEqual('xlsx');
         });
         it("should return xls", function () {
-            var result = Util.getFileExtension('application/vnd.ms-excel');
+            var result = Util.getFileExtension('xls', 'application/vnd.ms-excel');
             expect(result).toEqual('xls');
         });
+        it("should return csv on windows", function () {
+            var result = Util.getFileExtension('csv', 'application/vnd.ms-excel');
+            expect(result).toEqual(navigator.platform.indexOf('Win') !== -1 ? 'csv' : 'xls');
+        });
         it("should return ods", function () {
-            var result = Util.getFileExtension('application/vnd.oasis.opendocument.spreadsheet');
+            var result = Util.getFileExtension('ods', 'application/vnd.oasis.opendocument.spreadsheet');
             expect(result).toEqual('ods');
         });
     });
