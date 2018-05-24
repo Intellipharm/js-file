@@ -60,7 +60,8 @@ window.JSFile = window.JSFile || {};
                 self[cell_letter + cell_number] = new module.WorksheetCell({type: 's', value: item.value});
 
                 // increment letter
-                cell_letter = module.FileUtil.nextLetter(cell_letter);
+                //cell_letter = module.FileUtil.nextLetter(cell_letter);
+                cell_letter = module.FileUtil.nextColumn(cell_letter);
 
                 // count letters
                 _letter_count++;
