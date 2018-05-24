@@ -259,7 +259,7 @@ window.JSFile = window.JSFile || {};
                     }
 
                     // increment letter
-                    letter = self.nextLetter(letter);
+                    letter = self.nextColumn(letter);
                 });
 
             });
@@ -438,6 +438,43 @@ window.JSFile = window.JSFile || {};
             });
 
             return result;
+        };
+
+        this.nextColumn = function(currentColumn) {
+            //Logic only works upto two series column - A ... ZZ
+            //As it supports around 702 columns, in which practically we wouldn't hit
+
+            var charCode;
+
+            // convert letter to upper case
+            currentColumn = currentColumn.toUpperCase();
+            var nxtColumn = "";
+
+            if(currentColumn.length > 2) {
+                console.warn("Only 702 columns are supported");
+            }
+
+            if(currentColumn[currentColumn.length -1] === "Z" ) {
+                // Generate unicode value for given character
+                charCode = currentColumn.charCodeAt(0);
+                var suffix = "A";
+                if(charCode < 90) {
+                    // Convert integer to character
+                    nxtColumn = String.fromCharCode(charCode + 1)  + suffix;
+                } else {
+                    suffix += "A";
+                    nxtColumn = suffix;
+                }
+
+            } else {
+                // Generate unicode value for given character
+                charCode = currentColumn[currentColumn.length -1].charCodeAt(0);
+                var prefix = currentColumn.slice(0, -1);
+                // Convert integer to character
+                nxtColumn = prefix + String.fromCharCode(charCode + 1);
+            }
+
+            return nxtColumn;
         };
     };
 
